@@ -1,0 +1,59 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../ui/Container.astro';
+import LessonHeader from './LessonHeader.astro';
+import LessonIndex from './LessonIndex.astro';
+import LessonHero from './LessonHero.astro';
+import LessonFooter from './LessonFooter.astro';
+import ActivityViewer from './ActivityViewer.astro';
+import LessonIndexController from './LessonIndexController.astro';
+import { getLessonNavigation } from '../../data/courses/navigation';
+import type { Course } from '../../data/courses/types';
+
+interface Props {
+  course: Course;
+  entry: CollectionEntry<'lessons'>;
+  entries: CollectionEntry<'lessons'>[];
+}
+
+const { course, entry, entries } = Astro.props;
+const { Content } = await render(entry);
+const navigation = getLessonNavigation(entries, entry, course);
+const unitLabel = `Unidad ${entry.data.unit.order}`;
+---
+
+<BaseLayout title={`${entry.data.title} · ${course.title}`} description={entry.data.subtitle}>
+  <main class="min-h-screen bg-background" data-lesson-root>
+    <LessonHeader coursePath={course.slug} courseName={course.title} />
+    <LessonIndex
+      lessons={navigation.lessons}
+      currentSlug={navigation.currentSlug}
+      unitLabel={unitLabel}
+      unitTitle={entry.data.unit.title}
+      learningGroups={navigation.learningGroups}
+      unitLinks={navigation.unitLinks}
+    />
+    <article>
+      <LessonHero
+        title={entry.data.title}
+        unitLabel={unitLabel}
+        progressLabel={navigation.progressLabel}
+        description={entry.data.subtitle}
+        firstSectionId={entry.data.firstSectionId}
+        phrase={entry.data.heroPhrase ?? course.heroPhrase}
+        translation={entry.data.heroTranslation ?? course.heroTranslation}
+      />
+      <Content />
+      <Container>
+        <LessonFooter
+          coursePath={course.slug}
+          nextHref={navigation.nextLesson?.href}
+          nextLabel={navigation.nextLesson && `Siguiente: ${navigation.nextLesson.title}`}
+        />
+      </Container>
+    </article>
+    <ActivityViewer />
+  </main>
+  <LessonIndexController />
+</BaseLayout>

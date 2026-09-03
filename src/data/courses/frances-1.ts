@@ -4,24 +4,10 @@ export const course = {
   slug: 'frances-1',
   title: 'Francés I',
   plan: 'Plan nuevo',
-  units: [
-    {
-      id: 'u1',
-      title: 'Unidad 1',
-      theme: 'Primeras conversaciones',
-      lessons: 5
-    },
-    {
-      id: 'u2',
-      title: 'Unidad 2',
-      theme: 'Hablar de mí',
-      lessons: 9
-    },
-    {
-      id: 'u3',
-      title: 'Unidad 3',
-      theme: 'Personas y vida cotidiana',
-      lessons: 10
-    }
-  ]
+  description: 'Recorre situaciones cotidianas, practica a tu ritmo y conversa con más seguridad.',
+  status: 'Piloto disponible',
+  heroTitle: 'El francés empieza cuando te atreves a conversar.',
+  ctaLabel: 'Continuar mi recorrido',
+  heroPhrase: 'J’ai quinze ans.',
+  heroTranslation: 'Yo tengo quince años.'
 } satisfies Course;

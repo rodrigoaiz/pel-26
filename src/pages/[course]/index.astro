@@ -1,0 +1,20 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import CoursePage from '../../components/course/CoursePage.astro';
+import { courses } from '../../data/courses';
+import { getCourseIndexPaths } from '../../data/courses/navigation';
+import type { Course } from '../../data/courses/types';
+
+interface Props {
+  course: Course;
+}
+
+export function getStaticPaths() {
+  return getCourseIndexPaths(courses);
+}
+
+const { course } = Astro.props;
+const entries: CollectionEntry<'lessons'>[] = await getCollection('lessons');
+---
+
+<CoursePage course={course} entries={entries} />

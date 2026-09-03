@@ -1,0 +1,32 @@
+---
+import CourseHero from './CourseHero.astro';
+import UnitList from './UnitList.astro';
+import type { Course } from '../../data/courses/types';
+import type { getCourseNavigation } from '../../data/courses/navigation';
+
+interface Props {
+  course: Course;
+  navigation: ReturnType<typeof getCourseNavigation>;
+}
+
+const { course, navigation } = Astro.props;
+---
+
+<main>
+  <CourseHero
+    title={course.heroTitle}
+    description={course.description}
+    ctaLabel={course.ctaLabel}
+    ctaHref={navigation.firstLessonHref}
+    progressLabel={course.status}
+  />
+  <UnitList
+    units={navigation.units}
+    currentLessons={navigation.currentLessons}
+    lessonsByUnit={navigation.lessonsByUnit}
+    learningGroupsByUnit={navigation.learningGroupsByUnit}
+    coursePath={course.slug}
+    featuredUnitId={navigation.featuredUnitId}
+    featuredHref={navigation.firstLessonHref}
+  />
+</main>

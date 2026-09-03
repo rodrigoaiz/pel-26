@@ -1,0 +1,22 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import LessonPage from '../../components/lesson/LessonPage.astro';
+import { courses } from '../../data/courses';
+import { getLessonPaths } from '../../data/courses/navigation';
+import type { Course } from '../../data/courses/types';
+
+interface Props {
+  course: Course;
+  entry: CollectionEntry<'lessons'>;
+}
+
+export async function getStaticPaths() {
+  const entries: CollectionEntry<'lessons'>[] = await getCollection('lessons');
+  return getLessonPaths(entries, courses);
+}
+
+const { course, entry } = Astro.props;
+const entries: CollectionEntry<'lessons'>[] = await getCollection('lessons');
+---
+
+<LessonPage course={course} entry={entry} entries={entries} />

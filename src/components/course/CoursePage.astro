@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CourseHeader from './CourseHeader.astro';
+import CourseOverview from './CourseOverview.astro';
+import CourseFooter from './CourseFooter.astro';
+import { getCourseNavigation } from '../../data/courses/navigation';
+import type { Course } from '../../data/courses/types';
+
+interface Props {
+  course: Course;
+  entries: CollectionEntry<'lessons'>[];
+}
+
+const { course, entries } = Astro.props;
+const navigation = getCourseNavigation(entries, course);
+---
+
+<BaseLayout title={`${course.title} · ${course.plan}`} description={course.description}>
+  <CourseHeader courseName={course.title} coursePath={course.slug} />
+  <CourseOverview course={course} navigation={navigation} />
+  <CourseFooter />
+</BaseLayout>

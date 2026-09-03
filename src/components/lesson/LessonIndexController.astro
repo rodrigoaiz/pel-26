@@ -1,0 +1,32 @@
+<script>
+  import { gsap } from 'gsap';
+
+  const toggle = document.querySelector<HTMLButtonElement>('[data-index-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-index-panel]');
+  const backdrop = document.querySelector<HTMLElement>('[data-index-backdrop]');
+  const close = document.querySelector<HTMLButtonElement>('[data-index-close]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const setIndex = (open: boolean) => {
+    if (!panel || !toggle || !backdrop) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+    backdrop.hidden = !open;
+    document.body.classList.toggle('index-open', open);
+    if (open) {
+      close?.focus();
+      if (!reduceMotion) gsap.fromTo(panel, { x: 28, opacity: 0 }, { x: 0, opacity: 1, duration: 0.32, ease: 'power3.out' });
+    } else {
+      toggle.focus();
+    }
+  };
+
+  toggle?.addEventListener('click', () => setIndex(panel?.hidden ?? true));
+  close?.addEventListener('click', () => setIndex(false));
+  backdrop?.addEventListener('click', () => setIndex(false));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && panel && !panel.hidden) setIndex(false);
+  });
+
+  if (!reduceMotion) gsap.from('[data-hero] h1, [data-hero] p, [data-hero] a', { y: 20, opacity: 0, stagger: 0.08, duration: 0.58, ease: 'power3.out' });
+</script>

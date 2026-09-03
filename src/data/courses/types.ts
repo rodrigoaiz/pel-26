@@ -3,7 +3,6 @@ export type CourseUnit = {
   title: string;
   theme: string;
   lessons: number;
-  topics?: string[];
 };
 
 export type Course = {
@@ -12,7 +11,10 @@ export type Course = {
   plan: string;
   description?: string;
   status?: string;
-  units: CourseUnit[];
+  heroTitle?: string;
+  ctaLabel?: string;
+  heroPhrase?: string;
+  heroTranslation?: string;
 };
 
 export type LessonScreen = {

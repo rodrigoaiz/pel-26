@@ -1,12 +1,5 @@
-import activityMenu from './menu_asignatura.json';
-
-export type Lesson = {
-  slug: string;
-  title: string;
-  subtitle: string;
-  status: 'current' | 'next' | 'locked';
-  kind: 'dialogue' | 'practice' | 'production' | 'review';
-};
+import activityMenu from '../menu_asignatura.json';
+import type { Lesson } from './types';
 
 type MoodleActivity = {
   id: string;

@@ -13,7 +13,7 @@ const currentLessons = frances3.units[0].topics.map((topic, index) => ({
   subtitle: 'Tema provisional',
   status: index === 0 ? ('current' as const) : ('next' as const),
   kind: 'practice' as const
-})) satisfies import('../../data/course').Lesson[];
+})) satisfies import('../../data/courses/types').Lesson[];
 ---
 
 <BaseLayout title="Francés III · Plan nuevo" description="Índice tentativo de Francés III del PEL-UNAM.">

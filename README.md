@@ -28,7 +28,9 @@ Francés I conserva la portada y la lección piloto actuales. Francés III vive 
 
 ```text
 src/
+  data/courses/frances-1.ts
   data/courses/frances-3.ts
+  data/courses/types.ts
   pages/frances-3/index.astro
   pages/frances-3/[unit].astro
 ```

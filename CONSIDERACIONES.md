@@ -52,23 +52,25 @@ La regla de organizacion es mantener el contenido pedagogico en MDX, los compone
 Por defecto, Astro genera el sitio en:
 
 ```text
-dist/plan-actualizado/frances-1/
+dist/plan-actualizado/
 ```
 
 La URL prevista es:
 
 ```text
 https://pel.cch.unam.mx/plan-actualizado/frances-1/
+
+https://pel.cch.unam.mx/plan-actualizado/frances-3/
 ```
 
 La configuracion esta en `astro.config.mjs` y usa estas variables opcionales:
 
 ```bash
-ASTRO_BASE_PATH=/plan-actualizado/frances-1
+ASTRO_BASE_PATH=/plan-actualizado
 ASTRO_SITE_URL=https://pel.cch.unam.mx
 ```
 
-No se debe subir la carpeta `dist` como tal. Se sube el contenido de `dist/plan-actualizado/frances-1/` al directorio remoto equivalente.
+No se debe subir la carpeta `dist` como tal. Se sube el contenido de `dist/plan-actualizado/` al directorio remoto equivalente.
 
 ## Despliegue
 
@@ -108,7 +110,7 @@ Las actividades usadas actualmente estan en `public/h5p/`. Para agregar una acti
 1. Añadir el recurso HTML a `public/h5p/`.
 2. Referenciarlo desde el componente o la leccion correspondiente.
 3. Ejecutar `npm run build:production`.
-4. Confirmar que el recurso aparece dentro de `dist/plan-actualizado/frances-1/h5p/`.
+4. Confirmar que el recurso aparece dentro de `dist/plan-actualizado/h5p/`.
 
 ## Pendientes conocidos
 

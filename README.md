@@ -52,7 +52,7 @@ npm run build:production
 
 ## Despliegue
 
-El sistema de despliegue genera un paquete o sincroniza directamente el artefacto Astro. La salida pública predeterminada es `dist/plan-actualizado/frances-1/`.
+El sistema de despliegue genera un paquete o sincroniza directamente el artefacto Astro. La salida pública predeterminada es `dist/plan-actualizado/`.
 
 ```bash
 npm run setup:deploy       # solo la primera vez; editar deploy.config
@@ -69,42 +69,45 @@ El comando recomendado para preparar la entrega es:
 npm run build:production
 ```
 
-Primero ejecuta `astro check` y después genera el sitio estático en `dist/plan-actualizado/frances-1/`. La ruta pública predeterminada es:
+Primero ejecuta `astro check` y después genera el sitio estático en `dist/plan-actualizado/`. Las rutas públicas son:
 
 `https://pel.cch.unam.mx/plan-actualizado/frances-1/`
 
+`https://pel.cch.unam.mx/plan-actualizado/frances-3/`
+
 Para publicarlo por FTP, sube completa la carpeta:
 
-`dist/plan-actualizado/frances-1/`
+`dist/plan-actualizado/`
 
 al directorio remoto:
 
-`/plan-actualizado/frances-1/`
+`/plan-actualizado/`
 
 La carpeta local ya contiene la estructura final y debe incluir:
 
 ```text
-dist/plan-actualizado/frances-1/index.html
-dist/plan-actualizado/frances-1/_astro/
-dist/plan-actualizado/frances-1/assets/
-dist/plan-actualizado/frances-1/images/
-dist/plan-actualizado/frances-1/h5p/
-dist/plan-actualizado/frances-1/unidad-2/
+dist/plan-actualizado/index.html
+dist/plan-actualizado/_astro/
+dist/plan-actualizado/assets/
+dist/plan-actualizado/images/
+dist/plan-actualizado/h5p/
+dist/plan-actualizado/frances-1/
+dist/plan-actualizado/frances-3/
 ```
 
-La nueva ruta de Francés III se genera dentro del mismo artefacto mientras ambas asignaturas compartan build:
+Las rutas generadas para Francés III quedan dentro del mismo artefacto:
 
 ```text
-dist/plan-actualizado/frances-1/frances-3/index.html
-dist/plan-actualizado/frances-1/frances-3/u1/index.html
-dist/plan-actualizado/frances-1/frances-3/u2/index.html
-dist/plan-actualizado/frances-1/frances-3/u3/index.html
+dist/plan-actualizado/frances-3/index.html
+dist/plan-actualizado/frances-3/u1/index.html
+dist/plan-actualizado/frances-3/u2/index.html
+dist/plan-actualizado/frances-3/u3/index.html
 ```
 
-Su URL local equivalente es `/plan-actualizado/frances-1/frances-3/`. Antes de publicar Francés III en una carpeta pública propia, hay que ajustar la configuración de build por asignatura para que `ASTRO_BASE_PATH=/plan-actualizado/frances-3` haga que su portada sea la raíz del artefacto.
+La URL local equivalente es `/plan-actualizado/frances-3/`.
 
-1. crear en el servidor la carpeta `/plan-actualizado/frances-1/` dentro de la raíz pública, si el cliente FTP no la crea al subir carpetas;
-2. subir la carpeta local `dist/plan-actualizado/frances-1/` completa, conservando su contenido;
+1. crear en el servidor la carpeta `/plan-actualizado/` dentro de la raíz pública, si el cliente FTP no la crea al subir carpetas;
+2. subir la carpeta local `dist/plan-actualizado/` completa, conservando su contenido;
 3. comprobar la portada en `https://pel.cch.unam.mx/plan-actualizado/frances-1/`;
 4. comprobar la lección en `https://pel.cch.unam.mx/plan-actualizado/frances-1/unidad-2/mon-age/`.
 
@@ -115,14 +118,14 @@ La carpeta local `dist` es sólo el contenedor del artefacto de entrega y no for
 La ruta se puede sustituir sin editar el código:
 
 ```bash
-ASTRO_BASE_PATH=/otra-ruta/frances-1 npm run build:production
+ASTRO_BASE_PATH=/otra-ruta npm run build:production
 ```
 
 También puede cambiarse el dominio:
 
 ```bash
 ASTRO_SITE_URL=https://otro-dominio.example \
-ASTRO_BASE_PATH=/otra-ruta/frances-1 \
+ASTRO_BASE_PATH=/otra-ruta \
 npm run build:production
 ```
 
@@ -134,7 +137,7 @@ Para revisar localmente el resultado generado:
 npm run preview:production
 ```
 
-La URL de prueba conservará el prefijo `/plan-actualizado/frances-1/`. Astro Preview usará la carpeta configurada como salida.
+La URL de prueba conservará el prefijo `/plan-actualizado/`. Astro Preview usará la carpeta configurada como salida.
 
 ## Recursos H5P
 

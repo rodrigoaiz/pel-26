@@ -1,19 +1,29 @@
 ---
-import type { Lesson, LessonScreen } from '../../data/courses/types';
+import type { LearningGroup, Lesson } from '../../data/courses/types';
 
 interface Props {
   lessons: Lesson[];
   currentSlug: string;
   unitLabel?: string;
   unitTitle?: string;
-  screens?: LessonScreen[];
+  learningGroups?: LearningGroup[];
+  unitLinks?: { label: string; href: string; current?: boolean }[];
 }
 
-const { lessons, currentSlug, unitLabel = 'Unidad 2', unitTitle = 'Hablar de mí', screens = [] } = Astro.props;
+const { lessons, currentSlug, unitLabel = 'Unidad 2', unitTitle = 'Hablar de mí', learningGroups = [], unitLinks = [] } = Astro.props;
 ---
 
 <div class="fixed inset-0 z-40 bg-navy/55" data-index-backdrop hidden></div>
 <aside class="fixed inset-x-3 bottom-3 top-20 z-50 overflow-auto rounded-panel bg-surface-raised p-5 shadow-raised sm:left-auto sm:right-6 sm:w-96" id="lesson-index" data-index-panel aria-label={`Lecciones de ${unitLabel}`} hidden>
+  {unitLinks.length > 1 && <div class="relative mb-5 pt-2">
+    <span class="absolute left-3 top-0 z-10 -translate-y-1/2 rounded-full bg-primary px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-on-primary">Unidades</span>
+    <nav class="flex items-center justify-between rounded-xl border border-border bg-surface p-1" aria-label="Cambiar de unidad">
+      {unitLinks.map((unit) => <a class:list={[
+        'grid min-h-10 min-w-10 place-items-center rounded-lg px-3 text-xs font-bold no-underline transition',
+        unit.current ? 'bg-secondary-soft text-secondary' : 'text-muted hover:bg-secondary-soft hover:text-secondary'
+      ]} href={unit.href} aria-label={`Ir a Unidad ${unit.label}`} aria-current={unit.current ? 'page' : undefined}>{unit.label}</a>)}
+    </nav>
+  </div>}
   <div class="flex items-center justify-between gap-4">
     <div>
         <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">{unitLabel}</p>
@@ -24,13 +34,18 @@ const { lessons, currentSlug, unitLabel = 'Unidad 2', unitTitle = 'Hablar de mí
     </button>
   </div>
   <ol class="mt-6 list-none p-0">
-    {screens.length > 0 && <li class="border-t border-border py-3">
-      <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Pantallas de esta lección</p>
+    {learningGroups.length > 0 && <li class="border-t border-border py-3">
+      <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Aprendizajes y pantallas</p>
       <ol class="mt-2 list-none p-0">
-        {screens.map((screen, index) => <li><a class="flex items-center gap-3 py-3 text-sm text-foreground no-underline hover:text-secondary" href={`#${screen.id}`}><span class="text-muted">{String(index + 1).padStart(2, '0')}</span><span>{screen.title}</span></a></li>)}
+        {learningGroups.map((learning, index) => <li class="border-t border-border/70 first:border-t-0">
+          <p class="m-0 pt-3 text-xs font-bold text-secondary">Aprendizaje {index + 1}: {learning.title}</p>
+          <ol class="list-none p-0">
+            {learning.screens.map((screen, screenIndex) => <li><a class="flex items-center gap-3 py-3 pl-3 text-sm text-foreground no-underline hover:text-secondary" href={screen.href ?? `#${screen.id}`}><span class="text-muted">{String(screenIndex + 1).padStart(2, '0')}</span><span>{screen.title}</span></a></li>)}
+          </ol>
+        </li>)}
       </ol>
     </li>}
-    {lessons.map((item, index) => {
+    {learningGroups.length === 0 && lessons.map((item, index) => {
       const isCurrent = item.slug === currentSlug;
       const isLocked = item.status === 'locked';
       return (

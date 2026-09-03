@@ -8,8 +8,9 @@ const lessons = defineCollection({
     subtitle: z.string(),
     unit: z.string().optional(),
     unitTitle: z.string().optional(),
+    learning: z.string().optional(),
+    learningTitle: z.string().optional(),
     firstSectionId: z.string().optional(),
-    screens: z.array(z.object({ id: z.string(), title: z.string() })).default([]),
     status: z.enum(['current', 'next', 'locked']).default('next'),
     kind: z.enum(['dialogue', 'practice', 'production', 'review']).default('practice')
   })

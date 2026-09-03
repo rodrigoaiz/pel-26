@@ -8,6 +8,7 @@ import LessonHero from '../../components/lesson/LessonHero.astro';
 import LessonFooter from '../../components/lesson/LessonFooter.astro';
 import ActivityViewer from '../../components/lesson/ActivityViewer.astro';
 import { sitePath } from '../../utils/site-path';
+import type { LearningGroup } from '../../data/courses/types';
 
 interface Props {
   entry: CollectionEntry<'lessons'>;
@@ -30,15 +31,30 @@ const lessons = lessonEntries
   .filter((item) => item.id.startsWith('frances-3/'))
   .sort((a, b) => a.id.localeCompare(b.id))
   .map((item) => ({
-    slug: item.id.split('/').pop() ?? item.id,
+    slug: item.id,
     ...item.data,
     href: sitePath(`${item.id}/`)
   }));
-const slug = entry.id.split('/').pop() ?? entry.id;
-const currentIndex = lessons.findIndex((lesson) => lesson.slug === slug);
+const slug = entry.id;
+const currentIndex = lessons.findIndex((lesson) => lesson.slug === entry.id);
 const nextLesson = lessons[currentIndex + 1];
 const unitLabel = entry.data.unit ?? 'Francés III';
-const progressLabel = `Lección ${currentIndex + 1} de ${lessons.length}`;
+const unitPrefix = entry.id.split('/').slice(0, 2).join('/');
+const unitLessons = lessons.filter((lesson) => lesson.slug.startsWith(`${unitPrefix}/`));
+const unitIndex = unitLessons.findIndex((lesson) => lesson.slug === entry.id);
+const progressLabel = `Aprendizaje ${unitIndex + 1} de ${unitLessons.length}`;
+const unitLinks = Array.from({ length: 3 }, (_, index) => {
+  const firstLesson = lessons.find((lesson) => lesson.slug.startsWith(`frances-3/unidad-${index + 1}/`));
+  return firstLesson ? { label: String(index + 1), href: firstLesson.href ?? sitePath('frances-3/'), current: index + 1 === Number(entry.data.unit?.replace('Unidad ', '')) } : null;
+}).filter((unit): unit is { label: string; href: string; current: boolean } => unit !== null);
+const learningGroups = unitLessons.reduce<LearningGroup[]>((groups, lesson) => {
+  const source = lesson;
+  const learningId = source.learning ?? source.slug;
+  const group = groups.find((item) => item.id === learningId);
+  if (group) group.screens.push({ id: source.slug, title: source.title, href: source.href });
+  else groups.push({ id: learningId, title: source.learningTitle ?? 'Contenido de aprendizaje', screens: [{ id: source.slug, title: source.title, href: source.href }] });
+  return groups;
+}, []);
 ---
 
 <BaseLayout title={`${entry.data.title} · Francés III`}>
@@ -49,7 +65,8 @@ const progressLabel = `Lección ${currentIndex + 1} de ${lessons.length}`;
       currentSlug={slug}
       unitLabel={unitLabel}
       unitTitle={entry.data.unitTitle}
-      screens={entry.data.screens}
+      learningGroups={learningGroups}
+      unitLinks={unitLinks}
     />
     <article>
       <LessonHero

@@ -18,6 +18,13 @@ export type Course = {
 export type LessonScreen = {
   id: string;
   title: string;
+  href?: string;
+};
+
+export type LearningGroup = {
+  id: string;
+  title: string;
+  screens: LessonScreen[];
 };
 
 export type Lesson = {

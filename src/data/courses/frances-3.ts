@@ -11,7 +11,7 @@ export const frances3 = {
       id: 'u1',
       title: 'Unidad 1',
       theme: 'La invitación',
-      lessons: 1,
+      lessons: 4,
       topics: [
         'Actividades recreativas, culturales y pasatiempos',
         'Momentos del día y meses del año',
@@ -23,7 +23,7 @@ export const frances3 = {
       id: 'u2',
       title: 'Unidad 2',
       theme: 'El futuro: Quand je serai grand-e...',
-      lessons: 1,
+      lessons: 4,
       topics: [
         'Hablar de actividades futuras',
         'Proyectar',
@@ -34,7 +34,7 @@ export const frances3 = {
       id: 'u3',
       title: 'Unidad 3',
       theme: 'Nuestro porvenir: Agissons!',
-      lessons: 1,
+      lessons: 3,
       topics: [
         'Comprender documentos sobre desafíos globales',
         'Dar una opinión sobre temas comunitarios',

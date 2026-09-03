@@ -1,5 +1,5 @@
 ---
-import type { CourseUnit, Lesson } from '../../data/courses/types';
+import type { CourseUnit, LearningGroup, Lesson } from '../../data/courses/types';
 import Container from '../ui/Container.astro';
 import ArrowIcon from '../ui/ArrowIcon.astro';
 import { sitePath } from '../../utils/site-path';
@@ -8,82 +8,67 @@ interface Props {
   units: CourseUnit[];
   currentLessons: Lesson[];
   lessonsByUnit?: Record<string, Lesson[]>;
+  learningGroupsByUnit?: Record<string, LearningGroup[]>;
   coursePath?: string;
   featuredUnitId?: string;
   featuredHref?: string;
 }
 
-const { units, currentLessons, lessonsByUnit = {}, coursePath = 'frances-1', featuredUnitId = 'u2', featuredHref } = Astro.props;
-const unitHref = featuredHref ?? sitePath(`${coursePath}/`);
+const {
+  units,
+  currentLessons,
+  lessonsByUnit = {},
+  learningGroupsByUnit = {},
+  coursePath = 'frances-1',
+  featuredUnitId,
+  featuredHref
+} = Astro.props;
 ---
 
 <section class="py-16 sm:py-20" aria-labelledby="units-title">
   <Container>
-    <div class="grid gap-6 border-b border-border pb-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
+    <div class="border-b border-border pb-8">
       <h2 id="units-title" class="m-0 max-w-lg font-display text-4xl font-black leading-none tracking-[-.02em] sm:text-5xl">Tu mapa para avanzar</h2>
-      <p class="m-0 max-w-2xl text-base leading-7 text-muted lg:justify-self-end">
-        Cada unidad reúne situaciones que puedes usar fuera de la pantalla. Entra a la lección actual o revisa el camino completo.
-      </p>
+      <p class="mt-5 max-w-2xl text-base leading-7 text-muted">Cada unidad reúne aprendizajes y pantallas. Entra a cualquier pantalla disponible para comenzar.</p>
     </div>
 
-    <ol class="m-0 list-none p-0">
+    <ol class="mt-8 grid list-none gap-5 p-0">
       {units.map((unit, index) => {
         const unitLessons = lessonsByUnit[unit.id] ?? (unit.id === featuredUnitId ? currentLessons : []);
-        return unit.id === featuredUnitId ? (
-        <li class="my-6 overflow-hidden rounded-panel bg-navy text-on-navy shadow-raised">
-          <div class="grid gap-8 p-6 sm:p-8 lg:grid-cols-2 lg:p-10">
-            <div>
-              <div class="flex items-center gap-3 text-sm font-bold text-secondary">
-                <span class="grid size-9 place-items-center rounded-full bg-secondary text-navy">{index + 1}</span>
-                <span>Recorrido disponible</span>
+        const unitLearnings = learningGroupsByUnit[unit.id] ?? [];
+        const firstScreenHref = unitLearnings[0]?.screens[0]?.href ?? unitLessons[0]?.href;
+        const unitHref = unit.id === featuredUnitId && featuredHref ? featuredHref : (firstScreenHref ?? sitePath(`${coursePath}/`));
+
+        return <li class:list={[
+          'rounded-panel border border-border bg-surface p-6 sm:p-8',
+          unit.id === featuredUnitId && 'border-primary/40 shadow-soft'
+        ]}>
+          <header class="flex flex-col gap-5 border-b border-border pb-5 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+            <div class="flex items-start gap-4">
+              <span class="grid size-10 shrink-0 place-items-center rounded-full bg-secondary-soft font-bold text-secondary">{index + 1}</span>
+              <div>
+                <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Unidad {index + 1}</p>
+                <h3 class="mt-2 font-display text-3xl font-black leading-none sm:text-4xl">{unit.theme}</h3>
+                <p class="mt-2 text-sm text-muted">{unitLearnings.length || unit.lessons} aprendizajes · {unitLearnings.reduce((count, learning) => count + learning.screens.length, 0) || unitLessons.length} pantallas</p>
               </div>
-              <h3 class="mt-6 text-4xl font-black leading-none sm:text-5xl">{unit.title}</h3>
-              <p class="mt-3 text-lg text-on-navy/70">{unit.theme}</p>
-              {unit.topics && <ul class="mt-5 space-y-2 border-l border-on-navy/20 pl-4 text-sm text-on-navy/75">
-                {unit.topics.map((topic) => <li>{topic}</li>)}
-              </ul>}
-              <a class="mt-7 inline-flex min-h-11 items-center gap-3 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-on-primary no-underline transition hover:-translate-y-0.5 hover:bg-primary-hover" href={unitHref}>
-                Entrar a la unidad <ArrowIcon />
-              </a>
             </div>
-            <div class="border-t border-on-navy/15 pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-              <p class="m-0 text-xs font-bold uppercase tracking-widest text-on-navy/55">Itinerario · {unit.lessons} lecciones</p>
-              <ol class="mt-3 list-none p-0">
-                {currentLessons.slice(0, 4).map((lesson, lessonIndex) => (
-                  <li class="border-t border-on-navy/15 first:border-t-0">
-                    <a class:list={[
-                      'grid grid-cols-[2rem_1fr_auto] items-center gap-3 py-3 text-sm no-underline transition hover:text-secondary',
-                      lessonIndex === 0 ? 'font-bold text-secondary' : 'text-on-navy/78'
-                    ]} href={lessonIndex === 0 ? (lesson.href ?? unitHref) : '#proximamente'}>
-                      <span class="text-on-navy/45">{String(lessonIndex + 1).padStart(2, '0')}</span>
-                      <span>{lesson.title}</span>
-                      {lessonIndex === 0 ? <span class="text-xs">Actual</span> : <ArrowIcon class="size-4" />}
-                    </a>
-                  </li>
-                ))}
+            <a class="inline-flex min-h-11 shrink-0 items-center justify-center gap-3 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-on-primary no-underline transition hover:-translate-y-0.5 hover:bg-primary-hover" href={unitHref}>
+              Entrar a la unidad <ArrowIcon />
+            </a>
+          </header>
+
+          {unitLearnings.length > 0 ? <ol class="mt-5 grid list-none gap-3 p-0 sm:grid-cols-2">
+            {unitLearnings.map((learning, learningIndex) => <li class="rounded-xl bg-secondary-soft/45 p-4">
+              <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Aprendizaje {learningIndex + 1}</p>
+              <p class="mt-2 font-semibold leading-6">{learning.title}</p>
+              <ol class="mt-2 list-none border-t border-border/70 p-0">
+                {learning.screens.map((screen, screenIndex) => <li><a class="flex items-start gap-2 pt-3 text-sm font-bold text-primary no-underline hover:text-primary-hover" href={screen.href ?? '#proximamente'}><span class="text-muted">{String(screenIndex + 1).padStart(2, '0')}</span><span>{screen.title}</span></a></li>)}
               </ol>
-            </div>
-          </div>
-        </li>
-      ) : (
-        <li class="border-b border-border">
-          <div class="grid gap-3 py-5 sm:grid-cols-[3rem_1fr_auto_auto] sm:items-start sm:gap-4">
-            <span class="grid size-10 place-items-center rounded-full border border-border text-sm font-bold text-muted transition group-hover:border-secondary group-hover:text-secondary">{index + 1}</span>
-              <span>
-                <strong class="block font-display text-2xl leading-none">{unit.title}</strong>
-                <span class="mt-1 block text-sm text-muted">{unit.theme}</span>
-                {unit.topics && <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-muted">
-                  {unit.topics.map((topic) => <li>{topic}</li>)}
-                </ul>}
-              {unitLessons.length > 0 && <ol class="mt-4 list-none border-t border-border p-0 text-sm">
-                {unitLessons.map((lesson, lessonIndex) => <li class="border-b border-border/70 last:border-b-0"><a class="flex items-center gap-3 py-3 font-semibold text-primary no-underline hover:text-primary-hover" href={lesson.href ?? '#proximamente'}><span class="text-muted">{String(lessonIndex + 1).padStart(2, '0')}</span><span>{lesson.title}</span></a></li>)}
-              </ol>}
-            </span>
-            <span class="hidden text-sm font-semibold text-muted sm:block">{unit.lessons} lecciones</span>
-            <ArrowIcon class="size-5 text-primary transition group-hover:translate-x-1" />
-          </div>
-        </li>
-        );
+            </li>)}
+          </ol> : unitLessons.length > 0 ? <ol class="mt-5 list-none border-t border-border p-0">
+            {unitLessons.map((lesson, lessonIndex) => <li class="border-b border-border py-3 last:border-b-0"><a class="flex items-center gap-3 font-bold text-primary no-underline hover:text-primary-hover" href={lesson.href ?? '#proximamente'}><span class="text-muted">{String(lessonIndex + 1).padStart(2, '0')}</span><span>{lesson.title}</span></a></li>)}
+          </ol> : <p class="mt-5 mb-0 text-sm text-muted">Las pantallas de esta unidad se incorporarán próximamente.</p>}
+        </li>;
       })}
     </ol>
 
@@ -91,9 +76,7 @@ const unitHref = featuredHref ?? sitePath(`${coursePath}/`);
       <span class="grid size-10 place-items-center rounded-xl bg-secondary-soft text-secondary" aria-hidden="true">
         <svg class="size-5" viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
       </span>
-      <p class="m-0 max-w-3xl text-sm leading-6 text-muted">
-        Las actividades calificadas, foros y entregas permanecen en <strong class="text-foreground">Moodle</strong>. El recorrido te avisa cuándo entrar y conserva una salida clara para volver a la lección.
-      </p>
+      <p class="m-0 max-w-3xl text-sm leading-6 text-muted">Las actividades calificadas, foros y entregas permanecen en <strong class="text-foreground">Moodle</strong>. El recorrido te avisa cuándo entrar y conserva una salida clara para volver a la lección.</p>
     </div>
   </Container>
 </section>

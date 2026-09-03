@@ -43,6 +43,10 @@
   background: var(--pel-hero-overlay);
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 :root {
   --pel-background: #f3f1ea;
   --pel-surface: #fffdf8;

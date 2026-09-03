@@ -6,6 +6,7 @@ import UnitList from '../../components/course/UnitList.astro';
 import CourseFooter from '../../components/course/CourseFooter.astro';
 import { frances3 } from '../../data/courses/frances-3';
 import { getCollection, type CollectionEntry } from 'astro:content';
+import type { LearningGroup } from '../../data/courses/types';
 import { sitePath } from '../../utils/site-path';
 
 const lessonEntries: CollectionEntry<'lessons'>[] = await getCollection('lessons');
@@ -13,16 +14,30 @@ const frances3Lessons = lessonEntries
   .filter((entry) => entry.id.startsWith('frances-3/'))
   .sort((a, b) => a.id.localeCompare(b.id));
 const toLesson = (entry: CollectionEntry<'lessons'>, index = 1) => ({
-  slug: entry.id.split('/').pop() ?? entry.id,
+  slug: entry.id,
   ...entry.data,
   status: index === 0 ? 'current' as const : entry.data.status,
   href: sitePath(`${entry.id}/`)
 });
+const toLearningGroups = (entries: CollectionEntry<'lessons'>[]): LearningGroup[] => {
+  const groups = new Map<string, LearningGroup>();
+  entries.forEach((entry) => {
+    const id = entry.data.learning ?? entry.id;
+    const group = groups.get(id) ?? { id, title: entry.data.learningTitle ?? 'Contenido de aprendizaje', screens: [] };
+    group.screens.push({ id: entry.id, title: entry.data.title, href: sitePath(`${entry.id}/`) });
+    groups.set(id, group);
+  });
+  return [...groups.values()];
+};
 const lessonsByUnit = Object.fromEntries(frances3.units.map((unit, index) => [
   unit.id,
   frances3Lessons
     .filter((entry) => entry.id.startsWith(`frances-3/unidad-${index + 1}/`))
     .map((entry, lessonIndex) => toLesson(entry, lessonIndex))
+]));
+const learningGroupsByUnit = Object.fromEntries(frances3.units.map((unit, index) => [
+  unit.id,
+  toLearningGroups(frances3Lessons.filter((entry) => entry.id.startsWith(`frances-3/unidad-${index + 1}/`)))
 ]));
 const currentLessons = lessonsByUnit.u1 ?? [];
 const firstLessonHref = currentLessons[0]?.href ?? sitePath('frances-3/');
@@ -38,7 +53,7 @@ const firstLessonHref = currentLessons[0]?.href ?? sitePath('frances-3/');
       ctaHref={firstLessonHref}
       progressLabel={frances3.status}
     />
-    <UnitList units={frances3.units} currentLessons={currentLessons} lessonsByUnit={lessonsByUnit} coursePath="frances-3" featuredUnitId="u1" featuredHref={firstLessonHref} />
+    <UnitList units={frances3.units} currentLessons={currentLessons} lessonsByUnit={lessonsByUnit} learningGroupsByUnit={learningGroupsByUnit} coursePath="frances-3" featuredUnitId="u1" featuredHref={firstLessonHref} />
   </main>
   <CourseFooter />
 </BaseLayout>

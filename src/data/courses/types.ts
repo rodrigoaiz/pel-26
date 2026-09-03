@@ -4,4 +4,5 @@ export type Lesson = {
   subtitle: string;
   status: 'current' | 'next' | 'locked';
   kind: 'dialogue' | 'practice' | 'production' | 'review';
+  href?: string;
 };

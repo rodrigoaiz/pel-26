@@ -9,7 +9,7 @@ Sitio estático de Astro para la transición curricular de PEL-25. Este reposito
 - **MDX** queda habilitado con `@astrojs/mdx` para el contenido editorial de las lecciones. Una lección MDX puede usar componentes Astro para diálogos, tarjetas, avisos y actividades.
 - **Moodle/PHP** conserva autenticación, calificaciones, foros, tareas y la sesión. El build de Astro solo genera HTML estático y JavaScript puntual para interacción local.
 
-La regla para las siguientes lecciones será: contenido en MDX, componentes de interfaz en `src/components`, metadatos e IDs Moodle en `src/data`, y páginas `.astro` únicamente como composición de ruta. Así no se mezclan textos pedagógicos, layout y lógica de sesión.
+La regla para las siguientes lecciones será: contenido y metadatos editoriales en MDX, componentes de interfaz en `src/components`, configuración estructural del curso e IDs Moodle en `src/data/courses`, y páginas `.astro` únicamente como composición de ruta. La navegación de las lecciones se construye con la colección MDX mediante `getCollection('lessons')`; no se debe repetir la lista de lecciones en un TS.
 
 ## Alcance actual
 
@@ -19,6 +19,7 @@ La regla para las siguientes lecciones será: contenido en MDX, componentes de i
 - Actividad H5P integrada y acceso explícito al foro de Moodle.
 - Entrada de portada y hero con GSAP, desactivada para `prefers-reduced-motion`. El contenido nunca depende de una animación para ser visible.
 - Francés III incorporado como segundo espacio de trabajo: portada, índice tentativo y páginas índice para sus tres unidades.
+- Francés I usa `src/content/lessons/frances-1/` como fuente de verdad: cada MDX define sus metadatos y `[...slug].astro` genera su ruta automáticamente.
 
 La referencia visual de esta primera etapa ya está migrada a componentes Tailwind. No se deben añadir nuevas reglas visuales aisladas en `global.css`; los nuevos componentes deben consumir los tokens del tema y clases utilitarias.
 
@@ -35,7 +36,7 @@ src/
   pages/frances-3/[unit].astro
 ```
 
-El índice de Francés III es tentativo: sus unidades y temas sirven como mapa de planeación y no representan todavía lecciones ni actividades publicadas. Sus páginas reutilizan `BaseLayout`, `CourseHeader`, `CourseHero`, `UnitList` y `CourseFooter`, igual que Francés I.
+El índice de Francés III es tentativo: sus unidades y temas sirven como mapa de planeación y no representan todavía lecciones ni actividades publicadas. Cuando se creen sus MDX, la navegación deberá migrar a la misma fuente automática. Sus páginas reutilizan `BaseLayout`, `CourseHeader`, `CourseHero`, `UnitList` y `CourseFooter`, igual que Francés I.
 
 ## Dirección visual
 

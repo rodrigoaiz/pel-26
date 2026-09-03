@@ -32,7 +32,7 @@ const { lessons, currentSlug } = Astro.props;
               isCurrent ? 'font-bold text-secondary' : 'text-foreground',
               isLocked && 'opacity-50'
             ]}
-            href={isCurrent ? '#inicio' : '#proximamente'}
+             href={isCurrent ? '#inicio' : (item.href ?? '#proximamente')}
             aria-current={isCurrent ? 'page' : undefined}
           >
             <span class="text-muted">{String(index + 1).padStart(2, '0')}</span>

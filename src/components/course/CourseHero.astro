@@ -1,0 +1,49 @@
+---
+import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
+import ArrowIcon from '../ui/ArrowIcon.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="relative isolate min-h-course-hero overflow-hidden bg-background sm:min-h-course-hero-lg dark:bg-navy" aria-labelledby="course-title" data-course-hero>
+  <img
+    class="absolute inset-0 -z-20 size-full object-cover object-right sm:object-center"
+    src={`${base}/images/frances-paris-hero-v1.png`}
+    alt="Dos estudiantes conversan en París frente a la Torre Eiffel"
+    fetchpriority="high"
+    data-hero-image
+  />
+  <div class="hero-overlay absolute inset-0 -z-10"></div>
+
+  <Container class="flex min-h-course-hero items-end pb-10 pt-20 sm:min-h-course-hero-lg sm:pb-16 lg:items-center lg:py-24">
+    <div class="max-w-3xl text-foreground dark:text-on-navy" data-hero-copy>
+      <h1 id="course-title" class="max-w-headline font-display text-5xl font-black leading-display tracking-display sm:text-6xl lg:text-8xl">
+        El francés empieza cuando te atreves a conversar.
+      </h1>
+      <p class="mt-6 max-w-xl text-base leading-7 text-muted sm:text-lg dark:text-on-navy/80">
+        Recorre situaciones cotidianas, practica a tu ritmo y usa Moodle justo cuando toca participar, entregar o evaluar.
+      </p>
+      <div class="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+        <Button href={`${base}/unidad-2/mon-age/`} class="w-full sm:w-auto">
+          Continuar mi recorrido <ArrowIcon />
+        </Button>
+        <p class="m-0 flex items-center gap-3 text-sm font-semibold text-muted dark:text-on-navy/75">
+          <span class="h-px w-8 bg-highlight" aria-hidden="true"></span>
+          Unidad 2 · Lección 1 de 9
+        </p>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    timeline
+      .from('[data-hero-image]', { scale: 1.06, duration: 1.2 })
+      .from('[data-hero-copy] > *', { y: 24, opacity: 0, stagger: 0.1, duration: 0.65 }, 0.15);
+  }
+</script>

@@ -1,0 +1,24 @@
+---
+import Container from '../ui/Container.astro';
+import ArrowIcon from '../ui/ArrowIcon.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="relative overflow-hidden bg-navy text-on-navy" aria-labelledby="frances3-title">
+  <div class="absolute -right-24 -top-32 size-96 rounded-full border-[3rem] border-secondary/20" aria-hidden="true"></div>
+  <div class="absolute bottom-[-8rem] right-1/3 size-64 rounded-full bg-primary/15" aria-hidden="true"></div>
+  <Container class="relative grid min-h-[30rem] items-center gap-10 py-16 sm:min-h-[36rem] sm:py-24 lg:grid-cols-[1fr_.7fr]">
+    <div class="max-w-3xl">
+      <p class="m-0 text-sm font-bold uppercase tracking-[.2em] text-secondary">PEL · Plan nuevo</p>
+      <h1 id="frances3-title" class="mt-5 max-w-[11ch] text-6xl font-black leading-display tracking-display sm:text-8xl">Francés III</h1>
+      <p class="mt-6 max-w-xl text-lg leading-8 text-on-navy/75">El siguiente tramo para conversar con más matices, compartir ideas y participar en situaciones reales.</p>
+      <a class="mt-9 inline-flex min-h-12 items-center gap-3 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-on-primary no-underline transition hover:-translate-y-0.5 hover:bg-primary-hover" href={`${base}/frances-3/u1/`}>Explorar el índice <ArrowIcon /></a>
+    </div>
+    <div class="border-l border-on-navy/20 pl-6 lg:justify-self-end lg:max-w-xs">
+      <p class="m-0 text-xs font-bold uppercase tracking-[.18em] text-highlight">En construcción</p>
+      <p class="mt-4 text-2xl font-bold leading-tight">La estructura está lista para recibir las lecciones definitivas.</p>
+      <p class="mt-4 text-sm leading-6 text-on-navy/65">Por ahora, este índice sirve como mapa de planeación y no representa actividades publicadas.</p>
+    </div>
+  </Container>
+</section>

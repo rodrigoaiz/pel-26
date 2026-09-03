@@ -1,0 +1,163 @@
+@import '@fontsource-variable/open-sans';
+@import '@fontsource-variable/roboto-condensed';
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme inline {
+  --font-sans: 'Open Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Roboto Condensed Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--pel-background);
+  --color-surface: var(--pel-surface);
+  --color-surface-raised: var(--pel-surface-raised);
+  --color-foreground: var(--pel-foreground);
+  --color-muted: var(--pel-muted);
+  --color-border: var(--pel-border);
+  --color-navy: var(--pel-navy);
+  --color-navy-soft: var(--pel-navy-soft);
+  --color-on-navy: var(--pel-on-navy);
+  --color-primary: var(--pel-primary);
+  --color-primary-hover: var(--pel-primary-hover);
+  --color-on-primary: var(--pel-on-primary);
+  --color-secondary: var(--pel-secondary);
+  --color-secondary-soft: var(--pel-secondary-soft);
+  --color-warm-soft: var(--pel-warm-soft);
+  --color-highlight: var(--pel-highlight);
+  --color-ring: var(--pel-ring);
+
+  --shadow-soft: 0 18px 55px -28px rgb(7 30 47 / 0.35);
+  --shadow-raised: 0 24px 70px -30px rgb(4 24 39 / 0.55);
+  --radius-card: 1rem;
+  --radius-panel: 1.5rem;
+  --spacing-course-hero: 38rem;
+  --spacing-course-hero-lg: 43rem;
+  --container-headline: 11ch;
+  --tracking-display: -0.025em;
+  --tracking-section: -0.02em;
+  --leading-display: 0.92;
+  --leading-title: 0.94;
+}
+
+@utility hero-overlay {
+  background: var(--pel-hero-overlay);
+}
+
+:root {
+  --pel-background: #f3f1ea;
+  --pel-surface: #fffdf8;
+  --pel-surface-raised: #ffffff;
+  --pel-foreground: #0b273b;
+  --pel-muted: #526978;
+  --pel-border: #d7d2c7;
+  --pel-navy: #08283d;
+  --pel-navy-soft: #123c53;
+  --pel-on-navy: #f5fbf8;
+  --pel-primary: #e85f3d;
+  --pel-primary-hover: #c9482b;
+  --pel-on-primary: #ffffff;
+  --pel-secondary: #168f89;
+  --pel-secondary-soft: #d9eeea;
+  --pel-warm-soft: #f8ded5;
+  --pel-highlight: #f4c342;
+  --pel-ring: #168f89;
+  --pel-hero-overlay:
+    linear-gradient(0deg, rgb(243 241 234 / 0.98) 0%, rgb(255 253 248 / 0.7) 46%, rgb(255 253 248 / 0.08) 82%),
+    linear-gradient(90deg, rgb(255 253 248 / 0.94) 0%, rgb(255 253 248 / 0.7) 58%, rgb(255 253 248 / 0.18) 100%);
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --pel-background: #071724;
+  --pel-surface: #0d2232;
+  --pel-surface-raised: #122b3c;
+  --pel-foreground: #f0f6f3;
+  --pel-muted: #abc0c9;
+  --pel-border: #294657;
+  --pel-navy: #05131f;
+  --pel-navy-soft: #13384d;
+  --pel-on-navy: #f0f7f4;
+  --pel-primary: #ff8464;
+  --pel-primary-hover: #ff9a80;
+  --pel-on-primary: #11283a;
+  --pel-secondary: #65cec5;
+  --pel-secondary-soft: #123b3d;
+  --pel-warm-soft: #41282b;
+  --pel-highlight: #f0c85a;
+  --pel-ring: #65cec5;
+  --pel-hero-overlay:
+    linear-gradient(90deg, rgb(4 21 34 / 0.96) 0%, rgb(4 21 34 / 0.8) 48%, rgb(4 21 34 / 0.1) 100%),
+    linear-gradient(0deg, rgb(4 21 34 / 0.72) 0%, transparent 60%);
+  color-scheme: dark;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --pel-hero-overlay:
+      linear-gradient(90deg, rgb(255 253 248 / 0.98) 0%, rgb(255 253 248 / 0.9) 36%, rgb(255 253 248 / 0.34) 59%, rgb(255 253 248 / 0) 78%),
+      linear-gradient(0deg, rgb(243 241 234 / 0.9) 0%, rgb(243 241 234 / 0.12) 28%, transparent 52%);
+  }
+
+  [data-theme='dark'] {
+    --pel-hero-overlay:
+      linear-gradient(90deg, rgb(4 21 34 / 0.96) 0%, rgb(4 21 34 / 0.8) 48%, rgb(4 21 34 / 0.1) 100%),
+      linear-gradient(0deg, rgb(4 21 34 / 0.72) 0%, transparent 60%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth bg-background;
+  }
+
+  body {
+    @apply m-0 min-h-screen bg-background font-sans text-foreground antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-balance;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button {
+    font: inherit;
+  }
+
+  ::selection {
+    @apply bg-highlight text-navy;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-3 outline-ring;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.activity-open,
+.index-open {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

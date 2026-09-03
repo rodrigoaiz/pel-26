@@ -1,0 +1,16 @@
+---
+import ArrowIcon from '../ui/ArrowIcon.astro';
+
+interface Props {
+  file: string;
+  title: string;
+  label: string;
+}
+
+const { file, title, label } = Astro.props;
+const src = `${import.meta.env.BASE_URL}/h5p/${file}`;
+---
+
+<button class="group grid min-h-16 w-full grid-cols-[1fr_auto] items-center gap-4 border-b border-border bg-transparent py-4 text-left font-bold text-foreground transition hover:text-primary" type="button" data-activity-launch data-activity-title={title} data-activity-src={src}>
+  <span>{label}</span><ArrowIcon class="size-5 text-primary transition group-hover:translate-x-1" />
+</button>

@@ -1,0 +1,64 @@
+import LessonSection from '../../../../components/lesson/LessonSection.astro';
+import Dialogue from '../../../../components/lesson/Dialogue.astro';
+import PhraseCard from '../../../../components/lesson/PhraseCard.astro';
+import LanguagePair from '../../../../components/lesson/LanguagePair.astro';
+import StudyTip from '../../../../components/lesson/StudyTip.astro';
+import H5PActivity from '../../../../components/lesson/H5PActivity.astro';
+import DateExample from '../../../../components/lesson/DateExample.astro';
+import ActivityLauncher from '../../../../components/lesson/ActivityLauncher.astro';
+import MoodleAction from '../../../../components/lesson/MoodleAction.astro';
+
+<LessonSection
+  id="dialogue"
+  phase="Aprende"
+  title="Una conversación para empezar"
+  intro="Lee el diálogo e identifica cómo Max y Chloé preguntan y responden sobre la edad."
+  tone="soft"
+>
+  <Dialogue lines={[
+    { speaker: 'Chloé', text: "Bonjour ! Comment tu t'appelles ?" },
+    { speaker: 'Max', text: "Je m'appelle Max. Et toi ?" },
+    { speaker: 'Chloé', text: "Je m'appelle Chloé. Quel âge tu as ?" },
+    { speaker: 'Max', text: "J'ai quinze ans. Et toi, quel est ton âge ?" },
+    { speaker: 'Chloé', text: "J'ai seize ans." },
+  ]} />
+</LessonSection>
+
+<LessonSection
+  phase="Entiende"
+  title="La estructura que necesitas"
+  intro="En francés, la edad se expresa con el verbo avoir. Guarda esta frase como tu referencia para conversar."
+>
+  <PhraseCard phrase="J'ai quinze ans." emphasis="quinze" translation="Yo tengo quince años." />
+  <LanguagePair question="Quel âge tu as ?" answer="J'ai … ans." />
+  <StudyTip><strong class="text-foreground">Recuerda:</strong> <em>je</em> se convierte en <em>j'</em> antes de una vocal: <em>j'ai</em>.</StudyTip>
+</LessonSection>
+
+<H5PActivity
+  file="u2-act-1.html"
+  title="Elige la respuesta correcta"
+  description="Resuelve la actividad sin salir de la lección. Al terminar, continúa con la fecha de nacimiento."
+  nextHref="#date"
+  nextLabel="Continuar con la fecha de nacimiento"
+/>
+
+<LessonSection
+  id="date"
+  phase="Amplía"
+  title="Di tu fecha de nacimiento"
+  intro="La fecha se dice en el orden día, mes y año, igual que en español. Observa la pregunta y la respuesta completa."
+  tone="soft"
+>
+  <DateExample />
+  <div class="mt-8">
+    <ActivityLauncher file="u2-act-3.html" title="Practicar fechas de nacimiento" label="Practicar fechas de nacimiento" />
+    <ActivityLauncher file="u2-act-11.html" title="Completar fechas de artistas" label="Completar fechas de artistas" />
+  </div>
+</LessonSection>
+
+<MoodleAction
+  activityKey="u2a2"
+  title="Comparte tu fecha de nacimiento"
+  description="Participa en el foro de la Unidad 2. Se abrirá dentro de este recorrido usando tu sesión activa de Moodle."
+  buttonLabel="Participar en el foro"
+/>

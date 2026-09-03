@@ -1,0 +1,32 @@
+---
+import Container from '../ui/Container.astro';
+import ArrowIcon from '../ui/ArrowIcon.astro';
+
+interface Props {
+  file: string;
+  title: string;
+  description: string;
+  nextHref?: string;
+  nextLabel?: string;
+}
+
+const { file, title, description, nextHref, nextLabel } = Astro.props;
+const src = `${import.meta.env.BASE_URL}/h5p/${file}`;
+---
+
+<section class="relative left-1/2 w-screen -translate-x-1/2 bg-navy py-14 text-on-navy sm:py-18" data-reveal>
+  <Container>
+    <div>
+      <p class="m-0 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-bold uppercase tracking-widest">
+        <span class="inline-flex min-h-8 items-center rounded-lg bg-secondary/15 px-3 text-secondary">Practica</span>
+        <span class="text-on-navy/55">Actividad interactiva</span>
+      </p>
+      <h2 class="mt-5 max-w-2xl font-display text-4xl font-black leading-none tracking-section sm:text-5xl">{title}</h2>
+      <p class="mt-4 max-w-2xl text-base leading-7 text-on-navy/70">{description}</p>
+    </div>
+    <div class="mt-8 overflow-hidden rounded-panel bg-white shadow-raised">
+      <iframe class="block h-course-hero w-full border-0 sm:h-course-hero-lg" title={`Actividad H5P: ${title}`} src={src} loading="lazy" allowfullscreen></iframe>
+    </div>
+    {nextHref && nextLabel && <a class="mt-7 inline-flex min-h-11 items-center gap-3 font-bold text-primary no-underline transition hover:gap-4 hover:text-primary-hover" href={nextHref}>{nextLabel}<ArrowIcon direction="down" /></a>}
+  </Container>
+</section>

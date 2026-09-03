@@ -1,0 +1,28 @@
+---
+import Container from '../ui/Container.astro';
+
+interface Props {
+  id?: string;
+  phase: string;
+  title: string;
+  intro?: string;
+  tone?: 'default' | 'soft';
+}
+
+const { id, phase, title, intro, tone = 'default' } = Astro.props;
+---
+
+<section id={id} class:list={['border-b border-border py-14 sm:py-18', tone === 'soft' ? 'bg-surface' : 'bg-background']} data-reveal>
+  <Container class="grid gap-6 lg:grid-cols-[10rem_1fr] lg:gap-10">
+    <div>
+      <span class="inline-flex min-h-8 items-center rounded-lg bg-secondary-soft px-3 text-xs font-bold uppercase tracking-widest text-secondary">{phase}</span>
+    </div>
+    <div class="min-w-0">
+      <h2 class="m-0 max-w-3xl font-display text-4xl font-black leading-none tracking-section sm:text-5xl">{title}</h2>
+      {intro && <p class="mt-4 max-w-2xl text-base leading-7 text-muted">{intro}</p>}
+      <div class="mt-8">
+        <slot />
+      </div>
+    </div>
+  </Container>
+</section>

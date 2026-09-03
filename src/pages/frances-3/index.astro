@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CourseHeader from '../../components/course/CourseHeader.astro';
+import Frances3Hero from '../../components/course/Frances3Hero.astro';
+import CourseIndex from '../../components/course/CourseIndex.astro';
+import CourseFooter from '../../components/course/CourseFooter.astro';
+import { frances3 } from '../../data/courses/frances-3';
+
+const base = `${import.meta.env.BASE_URL}frances-3`;
+---
+
+<BaseLayout title="Francés III · Plan nuevo" description="Índice tentativo de Francés III del PEL-UNAM.">
+  <CourseHeader courseName={frances3.title} />
+  <main>
+    <Frances3Hero />
+    <CourseIndex units={frances3.units} basePath={base} />
+  </main>
+  <CourseFooter />
+</BaseLayout>

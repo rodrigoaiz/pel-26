@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+
+const {
+  title = 'Francés I · Plan nuevo',
+  description = 'Francés del Plan nuevo de estudio del CCH-UNAM.'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#10293f" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem('pel-theme');
+          const theme = savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- THESIS: Francés I se vive como un itinerario de conversación, no como una cadena de pantallas académicas. OWN-WORLD: azul institucional como estructura, coral y turquesa para orientar, tipografía condensada y una ilustración editorial que abre el recorrido. STORY: el estudiante reconoce dónde está, domina una situación comunicativa, practica sin perder contexto y vuelve a Moodle con claridad. FIRST VIEWPORT: la conversación ocupa la escena completa; una acción conduce directamente a la lección actual. FORM: Pasaporte de conversación refinado sobre el sistema institucional PEL. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
+    <slot />
+    <script>
+      const themeToggles = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+      const colorMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+
+      const applyTheme = (theme: 'light' | 'dark') => {
+        const isDark = theme === 'dark';
+        document.documentElement.dataset.theme = theme;
+        themeToggles.forEach((toggle) => {
+          toggle.setAttribute('aria-pressed', String(isDark));
+          toggle.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
+          const label = toggle.querySelector<HTMLElement>('[data-theme-label]');
+          if (label) label.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
+        });
+        colorMeta?.setAttribute('content', isDark ? '#0b1724' : '#10293f');
+      };
+
+      applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+      themeToggles.forEach((toggle) => toggle.addEventListener('click', () => {
+        const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        applyTheme(nextTheme);
+        try { localStorage.setItem('pel-theme', nextTheme); } catch { /* almacenamiento no disponible */ }
+      }));
+    </script>
+  </body>
+</html>

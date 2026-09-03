@@ -1,0 +1,54 @@
+<section class="fixed inset-0 z-50 grid grid-rows-[auto_1fr] bg-navy" data-activity-viewer hidden aria-label="Actividad abierta">
+  <header class="grid min-h-20 grid-cols-[auto_1fr] items-center gap-3 bg-navy px-3 py-3 text-on-navy sm:grid-cols-[auto_1fr_auto] sm:px-5">
+    <button class="inline-flex min-h-11 items-center gap-2 rounded-xl border border-on-navy/20 px-3 text-sm font-bold transition hover:border-secondary hover:text-secondary" type="button" data-activity-close>
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 6-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      <span class="hidden sm:inline">Regresar a la lección</span><span class="sm:hidden">Regresar</span>
+    </button>
+    <strong class="min-w-0 truncate text-sm" data-activity-viewer-title></strong>
+    <button class="col-span-2 min-h-10 justify-self-start text-sm font-bold text-secondary hover:underline sm:col-span-1 sm:justify-self-auto" type="button" data-activity-fallback>Ver directamente en Moodle</button>
+  </header>
+  <iframe class="size-full min-h-0 border-0 bg-white" data-activity-viewer-frame title="Actividad de la lección" allowfullscreen></iframe>
+  <div class="col-start-1 row-start-2 grid place-content-center justify-items-center gap-4 bg-surface text-muted" data-activity-loading hidden>
+    <span class="size-10 animate-spin rounded-full border-4 border-secondary-soft border-t-secondary" aria-hidden="true"></span>
+    <p class="m-0 font-bold">Cargando actividad…</p>
+  </div>
+</section>
+
+<script>
+  const viewer = document.querySelector<HTMLElement>('[data-activity-viewer]');
+  const viewerFrame = document.querySelector<HTMLIFrameElement>('[data-activity-viewer-frame]');
+  const viewerTitle = document.querySelector<HTMLElement>('[data-activity-viewer-title]');
+  const viewerClose = document.querySelector<HTMLButtonElement>('[data-activity-close]');
+  const viewerFallback = document.querySelector<HTMLButtonElement>('[data-activity-fallback]');
+  const activityLoading = document.querySelector<HTMLElement>('[data-activity-loading]');
+  let activitySource = '';
+  let activityTrigger: HTMLButtonElement | null = null;
+
+  const closeActivity = () => {
+    if (!viewer || !viewerFrame) return;
+    viewer.hidden = true;
+    viewerFrame.src = 'about:blank';
+    activityLoading?.setAttribute('hidden', '');
+    document.body.classList.remove('activity-open');
+    activityTrigger?.focus();
+  };
+
+  document.querySelectorAll<HTMLButtonElement>('[data-activity-launch]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (!viewer || !viewerFrame || !viewerTitle) return;
+      activitySource = button.dataset.activitySrc || '';
+      activityTrigger = button;
+      viewerTitle.textContent = button.dataset.activityTitle || 'Actividad';
+      viewer.hidden = false;
+      document.body.classList.add('activity-open');
+      activityLoading?.removeAttribute('hidden');
+      viewerClose?.focus();
+      requestAnimationFrame(() => { viewerFrame.src = activitySource; });
+    });
+  });
+
+  viewerFrame?.addEventListener('load', () => activityLoading?.setAttribute('hidden', ''));
+  viewerClose?.addEventListener('click', closeActivity);
+  viewerFallback?.addEventListener('click', () => { if (activitySource) window.location.assign(activitySource); });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && viewer && !viewer.hidden) closeActivity(); });
+</script>

@@ -1,0 +1,22 @@
+# Astro build output
+dist/
+deploy-package/
+
+# Deployment packages and local configuration
+*.tar.gz
+deploy.config
+
+# Dependencies and generated metadata
+node_modules/
+.astro/
+
+# Environment variables
+.env
+.env.production
+.env.staging
+
+# Local files
+.DS_Store
+*.log
+*.backup
+*~

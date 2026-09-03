@@ -1,0 +1,34 @@
+---
+import { moodleActivityUrl } from '../../data/course';
+import Button from '../ui/Button.astro';
+import ArrowIcon from '../ui/ArrowIcon.astro';
+import Container from '../ui/Container.astro';
+
+interface Props {
+  activityKey: string;
+  title: string;
+  description: string;
+  buttonLabel: string;
+}
+
+const { activityKey, title, description, buttonLabel } = Astro.props;
+const src = moodleActivityUrl(activityKey);
+---
+
+<section class="my-12" data-reveal>
+  <Container>
+    <div class="overflow-hidden rounded-panel bg-secondary-soft p-6 sm:p-8 lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-8">
+      <div>
+        <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-secondary">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5 12 4l8 3.5-8 3.5-8-3.5Zm3 2v5.7c0 1.5 2.2 2.8 5 2.8s5-1.3 5-2.8V9.5M20 8v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          Actividad en Moodle
+        </div>
+        <h2 class="mt-4 font-display text-3xl font-black leading-none sm:text-4xl">{title}</h2>
+        <p class="mb-0 mt-3 max-w-2xl text-sm leading-6 text-muted sm:text-base">{description}</p>
+      </div>
+      <Button class="mt-6 w-full lg:mt-0 lg:w-auto" type="button" data-activity-launch data-activity-title={`Foro: ${title}`} data-activity-src={src}>
+        {buttonLabel}<ArrowIcon />
+      </Button>
+    </div>
+  </Container>
+</section>

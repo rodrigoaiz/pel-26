@@ -1,0 +1,22 @@
+# Copy this file to deploy.config and fill in the server values.
+# The remote path must be the public directory for the generated base path.
+export DEPLOY_HOST_PROD="tu-servidor.com"
+export DEPLOY_USER_PROD="tu-usuario"
+export DEPLOY_PATH_PROD="/ruta/remota/plan-actualizado/frances-1/"
+
+export DEPLOY_HOST_STAGING="tu-servidor-staging.com"
+export DEPLOY_USER_STAGING="tu-usuario"
+export DEPLOY_PATH_STAGING="/ruta/remota/staging/plan-actualizado/frances-1/"
+
+load_deploy_config() {
+    local environment="$1"
+    if [ "$environment" = "production" ]; then
+        export DEPLOY_HOST="$DEPLOY_HOST_PROD"
+        export DEPLOY_USER="$DEPLOY_USER_PROD"
+        export DEPLOY_PATH="$DEPLOY_PATH_PROD"
+    else
+        export DEPLOY_HOST="$DEPLOY_HOST_STAGING"
+        export DEPLOY_USER="$DEPLOY_USER_STAGING"
+        export DEPLOY_PATH="$DEPLOY_PATH_STAGING"
+    fi
+}

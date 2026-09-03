@@ -1,0 +1,33 @@
+---
+import Container from '../ui/Container.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<footer class="mt-8 bg-navy text-on-navy">
+  <Container class="grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-3 lg:items-center">
+    <div class="flex items-center gap-4">
+      <img class="h-14 w-auto" src={`${base}/assets/pel-logo.svg`} alt="Programas de Estudio en Línea" />
+      <div>
+        <strong class="block font-display text-xl leading-tight">Programas de Estudio en Línea</strong>
+        <span class="mt-1 block text-xs text-on-navy/60">Recursos para aprender en el CCH</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm">
+      <strong class="text-secondary">UNAM</strong><span class="text-on-navy/70">Universidad Nacional Autónoma de México</span>
+      <strong class="text-secondary">CCH</strong><span class="text-on-navy/70">Colegio de Ciencias y Humanidades</span>
+    </div>
+
+    <nav class="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold lg:justify-end" aria-label="Enlaces institucionales">
+      <a class="text-on-navy no-underline hover:text-secondary" href="https://portalacademico.cch.unam.mx/aviso-legal">Aviso legal</a>
+      <a class="text-on-navy no-underline hover:text-secondary" href="https://www.cch.unam.mx/calendario-escolar">Calendario</a>
+      <a class="text-on-navy no-underline hover:text-secondary" href="https://www.cch.unam.mx/directorio">Directorio</a>
+    </nav>
+  </Container>
+  <div class="border-t border-on-navy/15">
+    <Container class="py-5 text-xs leading-5 text-on-navy/55">
+      © {new Date().getFullYear()} Escuela Nacional Colegio de Ciencias y Humanidades · Hecho en México
+    </Container>
+  </div>
+</footer>

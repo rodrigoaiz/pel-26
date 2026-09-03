@@ -1,0 +1,65 @@
+{
+  "nombreAsignatura": "Francés 1",
+  "asignatura": {
+    "Unidad 1": {
+      "url": "/frances-1/unidad1/t1/1.php",
+      "publicado": true,
+      "nombre": "Unidad 1",
+      "temas": [
+        {"nombre": "Se saluer et prendre congé - Saludar y despedirse", "url": "/frances-1/unidad1/t1", "paginas": 2},
+        {"nombre": "Se présenter formellement et informellement - Presentarse de manera formal e informal", "url": "/frances-1/unidad1/t2", "paginas": 1},
+        {"nombre": "L'alphabet - El alfabeto", "url": "/frances-1/unidad1/t3", "paginas": 1},
+        {"nombre": "Prononciation et diptongues - Pronunciación y diptongos", "url": "/frances-1/unidad1/t4", "paginas": 2},
+        {"nombre": "Production orale - Producción oral", "url": "/frances-1/unidad1/t5", "paginas": 2}
+      ]
+    },
+    "Unidad 2": {
+      "url": "/frances-1/unidad2/t1/1.php",
+      "publicado": true,
+      "nombre": "Unidad 2",
+      "temas": [
+        {"nombre": "Mon âge et ma date de naissance - Mi edad y mi fecha de nacimiento", "url": "/frances-1/unidad2/t1", "paginas": 3},
+        {"nombre": "Ma nationalité et mes données - Mi nacionalidad y mis datos", "url": "/frances-1/unidad2/t2", "paginas": 2},
+        {"nombre": "Mon numéro de téléphone, mon courriel et mon adresse - Mi número de teléfono, mi email y mi dirección", "url": "/frances-1/unidad2/t3", "paginas": 1},
+        {"nombre": "M'inscrire à... - Inscribirme a...", "url": "/frances-1/unidad2/t4", "paginas": 1},
+        {"nombre": "Mon emploi du temps... - Mi horario", "url": "/frances-1/unidad2/t5", "paginas": 1},
+        {"nombre": "Ma matière préférée est... - Mi materia preferida es...", "url": "/frances-1/unidad2/t6", "paginas": 1},
+        {"nombre": "Quelle heure est-il? - ¿Qué hora es?", "url": "/frances-1/unidad2/t7", "paginas": 2},
+        {"nombre": "Ma routine - Mi rutina", "url": "/frances-1/unidad2/t8", "paginas": 1},
+        {"nombre": "Production orale - Producción oral", "url": "/frances-1/unidad2/t9", "paginas": 1}
+      ]
+    },
+    "Unidad 3": {
+      "url": "/frances-1/unidad3/t1/1.php",
+      "publicado": true,
+      "nombre": "Unidad 3",
+      "temas": [
+        {"nombre": "Presentar a alguien: Je te présente - La familia y los pasatiempos", "url": "/frances-1/unidad3/t1", "paginas": 2},
+        {"nombre": "Les professions et les métiers - Las profesiones y ocupaciones", "url": "/frances-1/unidad3/t2", "paginas": 2},
+        {"nombre": "Les préférences et les loisirs - Los gustos y los pasatiempos", "url": "/frances-1/unidad3/t3", "paginas": 2},
+        {"nombre": "Parle-moi sur ta famille - Preguntar y responder preguntas sobre las actividades de la familia", "url": "/frances-1/unidad3/t4", "paginas": 1},
+        {"nombre": "Présenter un membre de la famille - Producción escrita/oral: presentar a un miembro de mi familia", "url": "/frances-1/unidad3/t5", "paginas": 1},
+        {"nombre": "Je te présente... - Te presento a...", "url": "/frances-1/unidad3/t6", "paginas": 1},
+        {"nombre": "Description Physique - La descripción física", "url": "/frances-1/unidad3/t7", "paginas": 2},
+        {"nombre": "Les habits - La descripción de la ropa", "url": "/frances-1/unidad3/t8", "paginas": 2},
+        {"nombre": "La personnalité - La personalidad", "url": "/frances-1/unidad3/t9", "paginas": 1},
+        {"nombre": "Évaluation finale de l'unité", "url": "/frances-1/unidad3/t10", "paginas": 1}
+      ]
+    }
+  },
+  "actividades": {
+    "u1a1": { "id": "5128", "moduleName": "quiz" },
+    "u1a2": { "id": "5129", "moduleName": "assign" },
+    "u1a3": { "id": "5130", "moduleName": "quiz" },
+
+    "u2a1": { "id": "5132", "moduleName": "quiz" },
+    "u2a2": { "id": "5134", "moduleName": "forum" },
+    "u2a3": { "id": "5135", "moduleName": "forum" },
+    "u2a4": { "id": "5136", "moduleName": "assign" },
+    "u2a5": { "id": "5133", "moduleName": "quiz" },
+
+    "u3a1": { "id": "5137", "moduleName": "quiz" },
+    "u3a2": { "id": "5138", "moduleName": "assign" },
+    "u3a3": { "id": "5139", "moduleName": "quiz" }
+  }
+}

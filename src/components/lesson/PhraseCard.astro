@@ -1,0 +1,18 @@
+---
+interface Props {
+  phrase: string;
+  translation: string;
+  emphasis?: string;
+}
+
+const { phrase, translation, emphasis } = Astro.props;
+const parts = emphasis ? phrase.split(emphasis) : [phrase];
+---
+
+<div class="relative overflow-hidden rounded-panel bg-navy p-6 text-on-navy shadow-raised sm:p-8">
+  <span class="absolute right-6 top-0 h-2 w-24 bg-highlight" aria-hidden="true"></span>
+  <p class="m-0 font-display text-4xl font-black leading-none sm:text-5xl">
+    {emphasis ? <>{parts[0]}<span class="text-secondary">{emphasis}</span>{parts[1]}</> : phrase}
+  </p>
+  <p class="mb-0 mt-3 text-sm text-on-navy/65">{translation}</p>
+</div>

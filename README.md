@@ -33,7 +33,7 @@ src/
   pages/frances-3/[unit].astro
 ```
 
-El índice de Francés III es tentativo: sus unidades y temas sirven como mapa de planeación y no representan todavía lecciones ni actividades publicadas.
+El índice de Francés III es tentativo: sus unidades y temas sirven como mapa de planeación y no representan todavía lecciones ni actividades publicadas. Sus páginas reutilizan `BaseLayout`, `CourseHeader`, `CourseHero`, `UnitList` y `CourseFooter`, igual que Francés I.
 
 ## Dirección visual
 

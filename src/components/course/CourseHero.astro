@@ -4,6 +4,21 @@ import Button from '../ui/Button.astro';
 import ArrowIcon from '../ui/ArrowIcon.astro';
 
 const base = import.meta.env.BASE_URL;
+interface Props {
+  title?: string;
+  description?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  progressLabel?: string;
+}
+
+const {
+  title = 'El francés empieza cuando te atreves a conversar.',
+  description = 'Recorre situaciones cotidianas, practica a tu ritmo y usa Moodle justo cuando toca participar, entregar o evaluar.',
+  ctaLabel = 'Continuar mi recorrido',
+  ctaHref = `${base}frances-1/unidad-2/mon-age/`,
+  progressLabel = 'Unidad 2 · Lección 1 de 9'
+}: Props = Astro.props;
 ---
 
 <section class="relative isolate min-h-course-hero overflow-hidden bg-background sm:min-h-course-hero-lg dark:bg-navy" aria-labelledby="course-title" data-course-hero>
@@ -19,18 +34,18 @@ const base = import.meta.env.BASE_URL;
   <Container class="flex min-h-course-hero items-end pb-10 pt-20 sm:min-h-course-hero-lg sm:pb-16 lg:items-center lg:py-24">
     <div class="max-w-3xl text-foreground dark:text-on-navy" data-hero-copy>
       <h1 id="course-title" class="max-w-headline font-display text-5xl font-black leading-display tracking-display sm:text-6xl lg:text-8xl">
-        El francés empieza cuando te atreves a conversar.
+        {title}
       </h1>
       <p class="mt-6 max-w-xl text-base leading-7 text-muted sm:text-lg dark:text-on-navy/80">
-        Recorre situaciones cotidianas, practica a tu ritmo y usa Moodle justo cuando toca participar, entregar o evaluar.
+        {description}
       </p>
       <div class="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-        <Button href={`${base}frances-1/unidad-2/mon-age/`} class="w-full sm:w-auto">
-          Continuar mi recorrido <ArrowIcon />
+        <Button href={ctaHref} class="w-full sm:w-auto">
+          {ctaLabel} <ArrowIcon />
         </Button>
         <p class="m-0 flex items-center gap-3 text-sm font-semibold text-muted dark:text-on-navy/75">
           <span class="h-px w-8 bg-highlight" aria-hidden="true"></span>
-          Unidad 2 · Lección 1 de 9
+          {progressLabel}
         </p>
       </div>
     </div>

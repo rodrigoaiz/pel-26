@@ -134,6 +134,8 @@ npm run build:production
 
 `.env.example` documenta los valores usados. La configuración cuenta además con esos mismos valores como defaults, por lo que no es obligatorio crear un archivo `.env` para la publicación prevista.
 
+En Vercel, si se define `ASTRO_SITE_URL`, debe ser una URL completa, por ejemplo `https://pel.cch.unam.mx`. Si la variable queda vacía, Astro usará el dominio institucional predeterminado.
+
 Para revisar localmente el resultado generado:
 
 ```bash

@@ -1,26 +1,20 @@
 ---
-import type { Lesson } from '../../data/courses/types';
+import type { CourseUnit, Lesson } from '../../data/courses/types';
 import Container from '../ui/Container.astro';
 import ArrowIcon from '../ui/ArrowIcon.astro';
-
-interface Unit {
-  id: string;
-  title: string;
-  theme: string;
-  lessons: number;
-}
+import { sitePath } from '../../utils/site-path';
 
 interface Props {
-  units: Unit[];
+  units: CourseUnit[];
   currentLessons: Lesson[];
+  lessonsByUnit?: Record<string, Lesson[]>;
   coursePath?: string;
   featuredUnitId?: string;
   featuredHref?: string;
 }
 
-const { units, currentLessons, coursePath = 'frances-1', featuredUnitId = 'u2', featuredHref } = Astro.props;
-const base = import.meta.env.BASE_URL;
-const unitHref = featuredHref ?? `${base}${coursePath}/`;
+const { units, currentLessons, lessonsByUnit = {}, coursePath = 'frances-1', featuredUnitId = 'u2', featuredHref } = Astro.props;
+const unitHref = featuredHref ?? sitePath(`${coursePath}/`);
 ---
 
 <section class="py-16 sm:py-20" aria-labelledby="units-title">
@@ -33,7 +27,9 @@ const unitHref = featuredHref ?? `${base}${coursePath}/`;
     </div>
 
     <ol class="m-0 list-none p-0">
-      {units.map((unit, index) => unit.id === featuredUnitId ? (
+      {units.map((unit, index) => {
+        const unitLessons = lessonsByUnit[unit.id] ?? (unit.id === featuredUnitId ? currentLessons : []);
+        return unit.id === featuredUnitId ? (
         <li class="my-6 overflow-hidden rounded-panel bg-navy text-on-navy shadow-raised">
           <div class="grid gap-8 p-6 sm:p-8 lg:grid-cols-2 lg:p-10">
             <div>
@@ -43,6 +39,9 @@ const unitHref = featuredHref ?? `${base}${coursePath}/`;
               </div>
               <h3 class="mt-6 text-4xl font-black leading-none sm:text-5xl">{unit.title}</h3>
               <p class="mt-3 text-lg text-on-navy/70">{unit.theme}</p>
+              {unit.topics && <ul class="mt-5 space-y-2 border-l border-on-navy/20 pl-4 text-sm text-on-navy/75">
+                {unit.topics.map((topic) => <li>{topic}</li>)}
+              </ul>}
               <a class="mt-7 inline-flex min-h-11 items-center gap-3 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-on-primary no-underline transition hover:-translate-y-0.5 hover:bg-primary-hover" href={unitHref}>
                 Entrar a la unidad <ArrowIcon />
               </a>
@@ -55,7 +54,7 @@ const unitHref = featuredHref ?? `${base}${coursePath}/`;
                     <a class:list={[
                       'grid grid-cols-[2rem_1fr_auto] items-center gap-3 py-3 text-sm no-underline transition hover:text-secondary',
                       lessonIndex === 0 ? 'font-bold text-secondary' : 'text-on-navy/78'
-                    ]} href={lessonIndex === 0 ? unitHref : '#proximamente'}>
+                    ]} href={lessonIndex === 0 ? (lesson.href ?? unitHref) : '#proximamente'}>
                       <span class="text-on-navy/45">{String(lessonIndex + 1).padStart(2, '0')}</span>
                       <span>{lesson.title}</span>
                       {lessonIndex === 0 ? <span class="text-xs">Actual</span> : <ArrowIcon class="size-4" />}
@@ -68,17 +67,24 @@ const unitHref = featuredHref ?? `${base}${coursePath}/`;
         </li>
       ) : (
         <li class="border-b border-border">
-          <a class="group grid min-h-24 grid-cols-[2.5rem_1fr_auto] items-center gap-4 py-5 no-underline sm:grid-cols-[3rem_1fr_auto_auto]" href="#proximamente" aria-label={`${unit.title}: ${unit.theme}`}>
+          <div class="grid gap-3 py-5 sm:grid-cols-[3rem_1fr_auto_auto] sm:items-start sm:gap-4">
             <span class="grid size-10 place-items-center rounded-full border border-border text-sm font-bold text-muted transition group-hover:border-secondary group-hover:text-secondary">{index + 1}</span>
-            <span>
-              <strong class="block font-display text-2xl leading-none">{unit.title}</strong>
-              <span class="mt-1 block text-sm text-muted">{unit.theme}</span>
+              <span>
+                <strong class="block font-display text-2xl leading-none">{unit.title}</strong>
+                <span class="mt-1 block text-sm text-muted">{unit.theme}</span>
+                {unit.topics && <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-muted">
+                  {unit.topics.map((topic) => <li>{topic}</li>)}
+                </ul>}
+              {unitLessons.length > 0 && <ol class="mt-4 list-none border-t border-border p-0 text-sm">
+                {unitLessons.map((lesson, lessonIndex) => <li class="border-b border-border/70 last:border-b-0"><a class="flex items-center gap-3 py-3 font-semibold text-primary no-underline hover:text-primary-hover" href={lesson.href ?? '#proximamente'}><span class="text-muted">{String(lessonIndex + 1).padStart(2, '0')}</span><span>{lesson.title}</span></a></li>)}
+              </ol>}
             </span>
             <span class="hidden text-sm font-semibold text-muted sm:block">{unit.lessons} lecciones</span>
             <ArrowIcon class="size-5 text-primary transition group-hover:translate-x-1" />
-          </a>
+          </div>
         </li>
-      ))}
+        );
+      })}
     </ol>
 
     <div class="mt-10 grid gap-4 border-t border-dashed border-border pt-6 sm:grid-cols-[auto_1fr] sm:items-start">

@@ -1,26 +1,35 @@
 ---
-import type { Lesson } from '../../data/courses/types';
+import type { Lesson, LessonScreen } from '../../data/courses/types';
 
 interface Props {
   lessons: Lesson[];
   currentSlug: string;
+  unitLabel?: string;
+  unitTitle?: string;
+  screens?: LessonScreen[];
 }
 
-const { lessons, currentSlug } = Astro.props;
+const { lessons, currentSlug, unitLabel = 'Unidad 2', unitTitle = 'Hablar de mí', screens = [] } = Astro.props;
 ---
 
 <div class="fixed inset-0 z-40 bg-navy/55" data-index-backdrop hidden></div>
-<aside class="fixed inset-x-3 bottom-3 top-20 z-50 overflow-auto rounded-panel bg-surface-raised p-5 shadow-raised sm:left-auto sm:right-6 sm:w-96" id="lesson-index" data-index-panel aria-label="Lecciones de la Unidad 2" hidden>
+<aside class="fixed inset-x-3 bottom-3 top-20 z-50 overflow-auto rounded-panel bg-surface-raised p-5 shadow-raised sm:left-auto sm:right-6 sm:w-96" id="lesson-index" data-index-panel aria-label={`Lecciones de ${unitLabel}`} hidden>
   <div class="flex items-center justify-between gap-4">
     <div>
-      <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Unidad 2</p>
-      <h2 class="mt-1 font-display text-3xl font-black leading-none">Hablar de mí</h2>
+        <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">{unitLabel}</p>
+        <h2 class="mt-1 font-display text-3xl font-black leading-none">{unitTitle}</h2>
     </div>
     <button class="grid size-10 place-items-center rounded-xl border border-border bg-surface transition hover:border-secondary hover:bg-secondary-soft" type="button" data-index-close aria-label="Cerrar índice">
       <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
     </button>
   </div>
   <ol class="mt-6 list-none p-0">
+    {screens.length > 0 && <li class="border-t border-border py-3">
+      <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Pantallas de esta lección</p>
+      <ol class="mt-2 list-none p-0">
+        {screens.map((screen, index) => <li><a class="flex items-center gap-3 py-3 text-sm text-foreground no-underline hover:text-secondary" href={`#${screen.id}`}><span class="text-muted">{String(index + 1).padStart(2, '0')}</span><span>{screen.title}</span></a></li>)}
+      </ol>
+    </li>}
     {lessons.map((item, index) => {
       const isCurrent = item.slug === currentSlug;
       const isLocked = item.status === 'locked';

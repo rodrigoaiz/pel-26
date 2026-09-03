@@ -1,24 +1,7 @@
-import activityMenu from '../menu_asignatura.json';
-
-type MoodleActivity = {
-  id: string;
-  moduleName: string;
-};
-
-const moodleActivities = activityMenu.actividades as Record<string, MoodleActivity>;
-
-/** Construye la ruta desde el mismo catálogo que usan las páginas PHP actuales. */
-export function moodleActivityUrl(activityKey: string) {
-  const activity = moodleActivities[activityKey];
-
-  if (!activity) {
-    throw new Error(`No existe la actividad Moodle "${activityKey}" en menu_asignatura.json.`);
-  }
-
-  return `/mod/${activity.moduleName}/view.php?id=${activity.id}`;
-}
+import type { Course } from './types';
 
 export const course = {
+  slug: 'frances-1',
   title: 'Francés I',
   plan: 'Plan nuevo',
   units: [
@@ -41,4 +24,4 @@ export const course = {
       lessons: 10
     }
   ]
-};
+} satisfies Course;

@@ -6,6 +6,7 @@ import UnitList from '../../components/course/UnitList.astro';
 import CourseFooter from '../../components/course/CourseFooter.astro';
 import { course } from '../../data/courses/frances-1';
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { sitePath } from '../../utils/site-path';
 
 const lessonEntries: CollectionEntry<'lessons'>[] = await getCollection('lessons');
 const unitTwo = lessonEntries
@@ -15,7 +16,7 @@ const unitTwo = lessonEntries
     slug: entry.id.split('/').pop() ?? entry.id,
     ...entry.data,
     status: index === 0 ? 'current' as const : entry.data.status,
-    href: `${import.meta.env.BASE_URL}frances-1/unidad-2/${entry.id.split('/').pop()}/`
+    href: sitePath(`frances-1/unidad-2/${entry.id.split('/').pop()}/`)
   }));
 ---
 

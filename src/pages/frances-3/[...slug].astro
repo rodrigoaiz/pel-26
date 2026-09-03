@@ -16,35 +16,53 @@ interface Props {
 export async function getStaticPaths() {
   const lessons: CollectionEntry<'lessons'>[] = await getCollection('lessons');
   return lessons
-    .filter((entry) => entry.id.startsWith('frances-1/'))
+    .filter((entry) => entry.id.startsWith('frances-3/'))
     .map((entry) => ({
-    params: { slug: entry.id.replace(/^frances-1\//, '') },
-    props: { entry }
+      params: { slug: entry.id.replace(/^frances-3\//, '') },
+      props: { entry }
     }));
 }
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const allEntries: CollectionEntry<'lessons'>[] = await getCollection('lessons');
-const lessons = allEntries
-  .filter((item) => item.id.startsWith('frances-1/unidad-2/'))
+const lessonEntries: CollectionEntry<'lessons'>[] = await getCollection('lessons');
+const lessons = lessonEntries
+  .filter((item) => item.id.startsWith('frances-3/'))
   .sort((a, b) => a.id.localeCompare(b.id))
   .map((item) => ({
     slug: item.id.split('/').pop() ?? item.id,
     ...item.data,
-    href: sitePath(`frances-1/unidad-2/${item.id.split('/').pop()}/`)
+    href: sitePath(`${item.id}/`)
   }));
 const slug = entry.id.split('/').pop() ?? entry.id;
+const currentIndex = lessons.findIndex((lesson) => lesson.slug === slug);
+const nextLesson = lessons[currentIndex + 1];
+const unitLabel = entry.data.unit ?? 'Francés III';
+const progressLabel = `Lección ${currentIndex + 1} de ${lessons.length}`;
 ---
 
-<BaseLayout title={`${entry.data.title} · Francés I`}>
+<BaseLayout title={`${entry.data.title} · Francés III`}>
   <main class="min-h-screen bg-background" data-lesson-root>
-    <LessonHeader />
-    <LessonIndex lessons={lessons} currentSlug={slug} unitLabel="Unidad 2" unitTitle="Hablar de mí" />
+    <LessonHeader coursePath="frances-3" courseName="Francés III" />
+    <LessonIndex
+      lessons={lessons}
+      currentSlug={slug}
+      unitLabel={unitLabel}
+      unitTitle={entry.data.unitTitle}
+      screens={entry.data.screens}
+    />
     <article>
-      <LessonHero title={entry.data.title} />
+      <LessonHero
+        title={entry.data.title}
+        unitLabel={unitLabel}
+        progressLabel={progressLabel}
+        description={entry.data.subtitle}
+        firstSectionId={entry.data.firstSectionId}
+        phrase="Un projet à venir."
+        translation="Una pantalla lista para desarrollar."
+      />
       <Content />
-      <Container><LessonFooter coursePath="frances-1" /></Container>
+      <Container><LessonFooter coursePath="frances-3" nextHref={nextLesson?.href} nextLabel={nextLesson && `Siguiente: ${nextLesson.title}`} /></Container>
     </article>
     <ActivityViewer />
   </main>
@@ -66,6 +84,5 @@ const slug = entry.id.split('/').pop() ?? entry.id;
     toggle?.addEventListener('click', () => setIndex(panel?.hidden ?? true));
     close?.addEventListener('click', () => setIndex(false)); backdrop?.addEventListener('click', () => setIndex(false));
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && panel && !panel.hidden) setIndex(false); });
-    if (!reduceMotion) gsap.from('[data-hero] h1, [data-hero] p, [data-hero] a', { y: 20, opacity: 0, stagger: 0.08, duration: 0.58, ease: 'power3.out' });
   </script>
 </BaseLayout>

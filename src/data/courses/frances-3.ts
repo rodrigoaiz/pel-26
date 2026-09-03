@@ -1,10 +1,4 @@
-export type CourseUnit = {
-  id: string;
-  title: string;
-  theme: string;
-  lessons: number;
-  topics: string[];
-};
+import type { Course } from './types';
 
 export const frances3 = {
   slug: 'frances-3',
@@ -16,44 +10,36 @@ export const frances3 = {
     {
       id: 'u1',
       title: 'Unidad 1',
-      theme: 'Intercambiar experiencias y proyectos',
-      lessons: 6,
+      theme: 'La invitación',
+      lessons: 1,
       topics: [
-        'Parler de ses expériences',
-        'Raconter un projet',
-        'Exprimer son opinion',
-        'Comparer des parcours',
-        'Comprendre un témoignage',
-        'Production orale'
+        'Actividades recreativas, culturales y pasatiempos',
+        'Momentos del día y meses del año',
+        'Saludos y despedidas',
+        'Elementos básicos de una invitación escrita'
       ]
     },
     {
       id: 'u2',
       title: 'Unidad 2',
-      theme: 'Participar en la vida social',
-      lessons: 6,
+      theme: 'El futuro: Quand je serai grand-e...',
+      lessons: 1,
       topics: [
-        'Inviter et proposer',
-        'Accepter ou refuser',
-        'Organiser une sortie',
-        'Donner des conseils',
-        'Écrire un message',
-        'Production écrite'
+        'Hablar de actividades futuras',
+        'Proyectar',
+        'Vida personal: viajes, residencia, trabajo y familia'
       ]
     },
     {
       id: 'u3',
       title: 'Unidad 3',
-      theme: 'Comprender el mundo que nos rodea',
-      lessons: 6,
+      theme: 'Nuestro porvenir: Agissons!',
+      lessons: 1,
       topics: [
-        'Décrire un lieu',
-        'Parler de l’environnement',
-        'Exprimer la cause et la conséquence',
-        'Débattre en groupe',
-        'Présenter une initiative',
-        'Évaluation finale'
+        'Comprender documentos sobre desafíos globales',
+        'Dar una opinión sobre temas comunitarios',
+        'Crear un proyecto comunitario'
       ]
     }
-  ] satisfies CourseUnit[]
-};
+  ]
+} satisfies Course;

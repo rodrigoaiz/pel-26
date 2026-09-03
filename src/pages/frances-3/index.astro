@@ -5,15 +5,27 @@ import CourseHero from '../../components/course/CourseHero.astro';
 import UnitList from '../../components/course/UnitList.astro';
 import CourseFooter from '../../components/course/CourseFooter.astro';
 import { frances3 } from '../../data/courses/frances-3';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { sitePath } from '../../utils/site-path';
 
-const base = `${import.meta.env.BASE_URL}frances-3`;
-const currentLessons = frances3.units[0].topics.map((topic, index) => ({
-  slug: `u1-t${index + 1}`,
-  title: topic,
-  subtitle: 'Tema provisional',
-  status: index === 0 ? ('current' as const) : ('next' as const),
-  kind: 'practice' as const
-})) satisfies import('../../data/courses/types').Lesson[];
+const lessonEntries: CollectionEntry<'lessons'>[] = await getCollection('lessons');
+const frances3Lessons = lessonEntries
+  .filter((entry) => entry.id.startsWith('frances-3/'))
+  .sort((a, b) => a.id.localeCompare(b.id));
+const toLesson = (entry: CollectionEntry<'lessons'>, index = 1) => ({
+  slug: entry.id.split('/').pop() ?? entry.id,
+  ...entry.data,
+  status: index === 0 ? 'current' as const : entry.data.status,
+  href: sitePath(`${entry.id}/`)
+});
+const lessonsByUnit = Object.fromEntries(frances3.units.map((unit, index) => [
+  unit.id,
+  frances3Lessons
+    .filter((entry) => entry.id.startsWith(`frances-3/unidad-${index + 1}/`))
+    .map((entry, lessonIndex) => toLesson(entry, lessonIndex))
+]));
+const currentLessons = lessonsByUnit.u1 ?? [];
+const firstLessonHref = currentLessons[0]?.href ?? sitePath('frances-3/');
 ---
 
 <BaseLayout title="Francés III · Plan nuevo" description="Índice tentativo de Francés III del PEL-UNAM.">
@@ -23,10 +35,10 @@ const currentLessons = frances3.units[0].topics.map((topic, index) => ({
       title="Francés III: nuevas ideas para conversar."
       description={frances3.description}
       ctaLabel="Explorar el índice"
-      ctaHref={`${base}/u1/`}
+      ctaHref={firstLessonHref}
       progressLabel={frances3.status}
     />
-    <UnitList units={frances3.units} currentLessons={currentLessons} coursePath="frances-3" featuredUnitId="u1" featuredHref={`${base}/u1/`} />
+    <UnitList units={frances3.units} currentLessons={currentLessons} lessonsByUnit={lessonsByUnit} coursePath="frances-3" featuredUnitId="u1" featuredHref={firstLessonHref} />
   </main>
   <CourseFooter />
 </BaseLayout>

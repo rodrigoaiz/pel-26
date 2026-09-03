@@ -1,10 +1,11 @@
 ---
 import ArrowIcon from '../ui/ArrowIcon.astro';
+import { sitePath } from '../../utils/site-path';
 
-const base = import.meta.env.BASE_URL;
+const { coursePath = 'frances-1', nextHref, nextLabel = 'Siguiente lección' } = Astro.props;
 ---
 
 <nav class="grid gap-3 border-t border-border py-8 sm:grid-cols-2" aria-label="Continuar en la asignatura">
-  <a class="inline-flex min-h-12 items-center gap-3 rounded-xl px-3 font-bold no-underline transition hover:bg-secondary-soft hover:text-secondary" href={`${base}frances-1/`}><ArrowIcon direction="left" />Ver todas las unidades</a>
-  <a class="inline-flex min-h-12 items-center justify-between gap-3 rounded-xl bg-warm-soft px-4 font-bold text-primary no-underline transition hover:bg-primary hover:text-on-primary sm:justify-self-end" href="#proximamente">Siguiente: Ma nationalité<ArrowIcon /></a>
+  <a class="inline-flex min-h-12 items-center gap-3 rounded-xl px-3 font-bold no-underline transition hover:bg-secondary-soft hover:text-secondary" href={sitePath(`${coursePath}/`)}><ArrowIcon direction="left" />Ver todas las unidades</a>
+  {nextHref && <a class="inline-flex min-h-12 items-center justify-between gap-3 rounded-xl bg-warm-soft px-4 font-bold text-primary no-underline transition hover:bg-primary hover:text-on-primary sm:justify-self-end" href={nextHref}>{nextLabel}<ArrowIcon /></a>}
 </nav>

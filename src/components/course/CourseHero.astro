@@ -2,8 +2,7 @@
 import Container from '../ui/Container.astro';
 import Button from '../ui/Button.astro';
 import ArrowIcon from '../ui/ArrowIcon.astro';
-
-const base = import.meta.env.BASE_URL;
+import { sitePath } from '../../utils/site-path';
 interface Props {
   title?: string;
   description?: string;
@@ -16,7 +15,7 @@ const {
   title = 'El francés empieza cuando te atreves a conversar.',
   description = 'Recorre situaciones cotidianas, practica a tu ritmo y usa Moodle justo cuando toca participar, entregar o evaluar.',
   ctaLabel = 'Continuar mi recorrido',
-  ctaHref = `${base}frances-1/unidad-2/mon-age/`,
+  ctaHref = sitePath('frances-1/unidad-2/mon-age/'),
   progressLabel = 'Unidad 2 · Lección 1 de 9'
 }: Props = Astro.props;
 ---
@@ -24,7 +23,7 @@ const {
 <section class="relative isolate min-h-course-hero overflow-hidden bg-background sm:min-h-course-hero-lg dark:bg-navy" aria-labelledby="course-title" data-course-hero>
   <img
     class="absolute inset-0 -z-20 size-full object-cover object-right sm:object-center"
-    src={`${base}/images/frances-paris-hero-v1.png`}
+    src={sitePath('images/frances-paris-hero-v1.png')}
     alt="Dos estudiantes conversan en París frente a la Torre Eiffel"
     fetchpriority="high"
     data-hero-image

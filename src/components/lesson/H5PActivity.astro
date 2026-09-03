@@ -1,6 +1,7 @@
 ---
 import Container from '../ui/Container.astro';
 import ArrowIcon from '../ui/ArrowIcon.astro';
+import { sitePath } from '../../utils/site-path';
 
 interface Props {
   file: string;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const { file, title, description, nextHref, nextLabel } = Astro.props;
-const src = `${import.meta.env.BASE_URL}h5p/${file}`;
+const src = sitePath(`h5p/${file}`);
 ---
 
 <section class="relative left-1/2 w-screen -translate-x-1/2 bg-navy py-14 text-on-navy sm:py-18" data-reveal>

@@ -88,10 +88,9 @@ pilots/frances-plan-nuevo/
 │   │   │   └── ActivityViewer.astro
 │   │   └── ThemeToggle.astro
 │   ├── content/
-│   │   └── lessons/
-│   │       └── frances-1/
-│   │           └── unidad-2/
-│   │               └── mon-age.mdx
+│   │   └── frances-1/
+│   │       └── unidad-2/
+│   │           └── mon-age.mdx
 │   ├── data/
 │   │   ├── course.ts
 │   │   └── moodle-activities.ts
@@ -178,7 +177,7 @@ Cada componente debe recibir datos por props y no depender de textos o IDs globa
 
 ### Paso 3 — Migrar el contenido a MDX
 
-Mover de `src/pages/unidad-2/mon-age.astro` a `src/content/lessons/frances-1/unidad-2/mon-age.mdx`:
+Mover de `src/pages/unidad-2/mon-age.astro` a `src/content/frances-1/unidad-2/mon-age.mdx`:
 
 - diálogo inicial;
 - explicación de `avoir`;

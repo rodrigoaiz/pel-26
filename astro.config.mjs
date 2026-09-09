@@ -25,6 +25,11 @@ export default defineConfig({
   outDir,
   integrations: [mdx()],
   vite: {
+    resolve: {
+      alias: {
+        '@': resolve(process.cwd(), 'src'),
+      },
+    },
     plugins: [tailwindcss()],
   },
   build: {

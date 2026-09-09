@@ -7,7 +7,5 @@ export const frances3 = {
   description: 'Un espacio de trabajo para organizar el siguiente tramo de tu recorrido en francés.',
   status: 'Índice tentativo',
   heroTitle: 'Francés III: nuevas ideas para conversar.',
-  ctaLabel: 'Explorar el índice',
-  heroPhrase: 'Un projet à venir.',
-  heroTranslation: 'Una pantalla lista para desarrollar.'
+  ctaLabel: 'Explorar el índice'
 } satisfies Course;

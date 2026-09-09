@@ -19,9 +19,6 @@ const lessons = defineCollection({
       order: z.number().int().positive()
     }),
     screenOrder: z.number().int().positive().default(1),
-    firstSectionId: z.string().optional(),
-    heroPhrase: z.string().optional(),
-    heroTranslation: z.string().optional(),
     status: z.enum(['current', 'next', 'locked']).default('next'),
     kind: z.enum(['dialogue', 'practice', 'production', 'review']).default('practice')
   })

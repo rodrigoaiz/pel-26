@@ -1,6 +1,6 @@
 import type { CollectionEntry } from 'astro:content';
 import type { Course, CourseUnit, LearningGroup } from './types';
-import { sitePath } from '../../utils/site-path';
+import { sitePath } from '@/utils/site-path';
 
 type LessonEntry = CollectionEntry<'lessons'>;
 

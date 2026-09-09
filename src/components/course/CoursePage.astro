@@ -1,11 +1,11 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
 import CourseHeader from './CourseHeader.astro';
 import CourseOverview from './CourseOverview.astro';
 import CourseFooter from './CourseFooter.astro';
-import { getCourseNavigation } from '../../data/courses/navigation';
-import type { Course } from '../../data/courses/types';
+import { getCourseNavigation } from '@/data/courses/navigation';
+import type { Course } from '@/data/courses/types';
 
 interface Props {
   course: Course;

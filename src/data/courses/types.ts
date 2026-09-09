@@ -13,8 +13,6 @@ export type Course = {
   status?: string;
   heroTitle?: string;
   ctaLabel?: string;
-  heroPhrase?: string;
-  heroTranslation?: string;
 };
 
 export type LessonScreen = {

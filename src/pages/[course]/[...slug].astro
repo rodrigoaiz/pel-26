@@ -1,9 +1,9 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import LessonPage from '../../components/lesson/LessonPage.astro';
-import { courses } from '../../data/courses';
-import { getLessonPaths } from '../../data/courses/navigation';
-import type { Course } from '../../data/courses/types';
+import LessonPage from '@/components/lesson/LessonPage.astro';
+import { courses } from '@/data/courses';
+import { getLessonPaths } from '@/data/courses/navigation';
+import type { Course } from '@/data/courses/types';
 
 interface Props {
   course: Course;

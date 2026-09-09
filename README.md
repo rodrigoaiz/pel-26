@@ -19,7 +19,7 @@ La regla para las siguientes lecciones será: contenido, jerarquía y orden en M
 - Actividad H5P integrada y acceso explícito al foro de Moodle.
 - Entrada de portada y hero con GSAP, desactivada para `prefers-reduced-motion`. El contenido nunca depende de una animación para ser visible.
 - Francés III incorporado con tres unidades, once aprendizajes y pantallas navegables.
-- Cada curso usa `src/content/lessons/<curso>/` como fuente de verdad. Los MDX definen unidad, aprendizaje, pantalla, orden y ruta pública.
+- Cada curso usa `src/content/<curso>/` como fuente de verdad. Los MDX definen unidad, aprendizaje, pantalla, orden y ruta pública.
 
 La referencia visual de esta primera etapa ya está migrada a componentes Tailwind. No se deben añadir nuevas reglas visuales aisladas en `global.css`; los nuevos componentes deben consumir los tokens del tema y clases utilitarias.
 
@@ -31,7 +31,7 @@ Las páginas son genéricas y no se copian por asignatura:
 src/
   pages/[course]/index.astro
   pages/[course]/[...slug].astro
-  content/lessons/<curso>/<unidad>/<aprendizaje>/<pantalla>.mdx
+  content/<curso>/<unidad>/<aprendizaje>/<pantalla>.mdx
   data/courses/<curso>.ts
   data/courses/index.ts
 ```

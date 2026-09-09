@@ -1,0 +1,239 @@
+---
+interface Props {
+  /** Texto visible en el disparador del acordeón. */
+  title: string;
+  /** Identificador estable para enlazar el botón y su región. */
+  id?: string;
+  /** Abre el acordeón al cargar la página. */
+  open?: boolean;
+}
+
+const { title, id, open = false } = Astro.props;
+const slug = title
+  .toLocaleLowerCase('es')
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-|-$/g, '');
+const accordionId = id ?? `accordion-${slug || 'item'}`;
+const triggerId = `${accordionId}-trigger`;
+const panelId = `${accordionId}-panel`;
+---
+
+<div class="accordion" data-accordion data-open={open ? '' : undefined}>
+  <h3 class="accordion-heading">
+    <button
+      id={triggerId}
+      class="accordion-trigger"
+      type="button"
+      aria-expanded={open ? 'true' : 'false'}
+      aria-controls={panelId}
+      data-accordion-trigger
+    >
+      <span>{title}</span>
+      <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  </h3>
+  <div
+    id={panelId}
+    class="accordion-panel"
+    role="region"
+    aria-labelledby={triggerId}
+    aria-hidden={open ? 'false' : 'true'}
+    inert={!open ? true : undefined}
+    data-accordion-panel
+  >
+    <div class="accordion-content">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .accordion {
+    overflow: hidden;
+    border-block: 1px solid var(--pel-border);
+    border-inline-start: 2px solid transparent;
+    background: transparent;
+  }
+
+  .accordion + .accordion {
+    border-block-start: 0;
+  }
+
+  .accordion[data-open] {
+    border-inline-start-color: var(--pel-secondary);
+  }
+
+  .accordion-heading {
+    margin: 0;
+  }
+
+  .accordion-trigger {
+    display: flex;
+    width: 100%;
+    min-height: 3.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0.25rem 0.85rem 1rem;
+    border: 0;
+    background: transparent;
+    color: var(--pel-foreground);
+    text-align: left;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: color 180ms ease-out;
+  }
+
+  .accordion-trigger:hover {
+    color: var(--pel-secondary);
+  }
+
+  .accordion-trigger:focus-visible {
+    position: relative;
+    z-index: 1;
+  }
+
+  .accordion-icon {
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.35rem;
+    border: 1px solid var(--pel-border);
+    border-radius: 999px;
+    color: var(--pel-muted);
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .accordion-icon:hover {
+    border-color: var(--pel-secondary);
+    color: var(--pel-secondary);
+  }
+
+  .accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      grid-template-rows 360ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 220ms ease-out;
+  }
+
+  .accordion[data-open] .accordion-panel {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .accordion[data-open] .accordion-icon {
+    transform: rotate(180deg);
+    border-color: var(--pel-secondary);
+    background: var(--pel-secondary);
+    color: var(--pel-on-navy);
+  }
+
+  .accordion-content {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 1rem 1.35rem;
+    color: var(--pel-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .accordion-content :global(> p) {
+    width: min(100%, 65ch);
+    margin: 0.8rem auto 0;
+  }
+
+  .accordion-content :global(> ul),
+  .accordion-content :global(> ol) {
+    width: min(100%, 65ch);
+    margin: 0.9rem auto 0;
+    padding-left: 1.4rem;
+  }
+
+  .accordion-content :global(> ul) {
+    list-style: disc;
+  }
+
+  .accordion-content :global(> ol) {
+    list-style: decimal;
+  }
+
+  .accordion-content :global(li::marker) {
+    color: var(--pel-secondary);
+    font-weight: 800;
+  }
+
+  @media (min-width: 40rem) {
+    .accordion-trigger {
+      min-height: 4rem;
+      padding-inline: 1.25rem 0.5rem;
+    }
+
+    .accordion-content {
+      padding-inline: 1.25rem 1.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-panel,
+    .accordion-icon,
+    .accordion-trigger {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const accordions = document.querySelectorAll<HTMLElement>('[data-accordion]');
+
+  accordions.forEach((accordion) => {
+    if (accordion.dataset.enhanced) return;
+    accordion.dataset.enhanced = 'true';
+
+    const trigger = accordion.querySelector<HTMLButtonElement>('[data-accordion-trigger]');
+    const panel = accordion.querySelector<HTMLElement>('[data-accordion-panel]');
+    if (!trigger || !panel) return;
+    const siblings = accordion.parentElement
+      ? Array.from(accordion.parentElement.children).filter(
+          (element): element is HTMLElement => element instanceof HTMLElement && element.matches('[data-accordion]'),
+        )
+      : [];
+
+    const setOpen = (open: boolean) => {
+      if (open) {
+        siblings?.forEach((sibling) => {
+          if (sibling === accordion) return;
+          const siblingTrigger = sibling.querySelector<HTMLButtonElement>('[data-accordion-trigger]');
+          const siblingPanel = sibling.querySelector<HTMLElement>('[data-accordion-panel]');
+          sibling.removeAttribute('data-open');
+          siblingTrigger?.setAttribute('aria-expanded', 'false');
+          siblingPanel?.setAttribute('aria-hidden', 'true');
+          siblingPanel?.setAttribute('inert', '');
+        });
+      }
+
+      accordion.toggleAttribute('data-open', open);
+      trigger.setAttribute('aria-expanded', String(open));
+      panel.setAttribute('aria-hidden', String(!open));
+
+      if (open) {
+        panel.removeAttribute('inert');
+      } else {
+        panel.setAttribute('inert', '');
+      }
+    };
+
+    trigger.addEventListener('click', () => {
+      setOpen(trigger.getAttribute('aria-expanded') !== 'true');
+    });
+  });
+</script>

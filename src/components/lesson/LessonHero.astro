@@ -18,13 +18,14 @@ const {
 } = Astro.props;
 ---
 
-<header id="inicio" class="border-b border-border bg-surface" data-lesson-heading>
-  <Container class="py-8 sm:py-10 lg:py-12">
+<header id="inicio" class="relative isolate overflow-hidden border-b border-border bg-surface" data-lesson-heading>
+  <div class="lesson-hero-atmosphere pointer-events-none absolute inset-0 z-0" aria-hidden="true"></div>
+  <Container class="relative z-10 py-8 sm:py-10 lg:py-12">
     <p class="m-0 text-sm font-bold text-secondary">
       {unitLabel} · {unitTitle}
     </p>
     <p class="mt-2 text-sm font-semibold text-muted">{learningLabel}</p>
     <h1 class="mt-5 max-w-4xl font-display text-4xl font-black leading-title tracking-display sm:text-5xl lg:text-6xl">{title}</h1>
-    <p class="mb-0 mt-4 max-w-3xl text-base leading-7 text-muted sm:text-lg">{description}</p>
+    <p class="mb-0 mt-4 max-w-prose text-base leading-7 text-muted sm:text-lg">{description}</p>
   </Container>
 </header>

@@ -23,6 +23,23 @@ La regla para las siguientes lecciones será: contenido, jerarquía y orden en M
 
 La referencia visual de esta primera etapa ya está migrada a componentes Tailwind. No se deben añadir nuevas reglas visuales aisladas en `global.css`; los nuevos componentes deben consumir los tokens del tema y clases utilitarias.
 
+### Imágenes de lecciones
+
+Las imágenes editoriales se guardan en `public/images/<asignatura>/<unidad>/`, agrupadas por curso y unidad. Los recursos compartidos viven en `public/images/shared/`. Se insertan desde MDX con `LessonImage`:
+
+```mdx
+import LessonImage from '@/components/lesson/LessonImage.astro';
+
+<LessonImage
+  src="images/frances-3/unidad-1/invitacion.jpg"
+  alt="Invitación de cumpleaños en francés"
+>
+  <em>Fuente:</em> Archivo de la asignatura.
+</LessonImage>
+```
+
+Usa `caption="..."` para un pie simple o contenido hijo para usar cursivas, enlaces y otro HTML/MDX. Usa `variant="wide"` cuando la imagen necesite una anchura mayor que la columna de lectura.
+
 ### Agregar una asignatura
 
 Las páginas son genéricas y no se copian por asignatura:
@@ -150,4 +167,6 @@ La URL de prueba conservará el prefijo `/plan-actualizado/`. Astro Preview usar
 
 ## Recursos H5P
 
-Los tres recursos usados por la lección piloto se incluyen en `public/h5p/` y se copian al build. Cuando se migren más lecciones, sus recursos deben añadirse a esa carpeta o automatizarse desde el inventario curricular.
+Los recursos H5P se guardan en `public/h5p/<asignatura>/<unidad>/` y se copian al build. Los componentes aceptan alias cortos para las actividades existentes o rutas completas relativas a `h5p/`.
+
+Los PDFs y documentos descargables se guardan en `public/docs/<asignatura>/<unidad>/`. La utilidad `documentPath` centraliza sus URLs y respeta el prefijo de despliegue.

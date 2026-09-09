@@ -1,11 +1,10 @@
 <section class="fixed inset-0 z-50 grid grid-rows-[auto_1fr] bg-navy" data-activity-viewer hidden aria-label="Actividad abierta">
-  <header class="grid min-h-20 grid-cols-[auto_1fr] items-center gap-3 bg-navy px-3 py-3 text-on-navy sm:grid-cols-[auto_1fr_auto] sm:px-5">
+  <header class="grid min-h-20 grid-cols-[auto_1fr] items-center gap-3 bg-navy px-3 py-3 text-on-navy sm:px-5">
     <button class="inline-flex min-h-11 items-center gap-2 rounded-xl border border-on-navy/20 px-3 text-sm font-bold transition hover:border-secondary hover:text-secondary" type="button" data-activity-close>
       <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 6-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
       <span class="hidden sm:inline">Regresar a la lección</span><span class="sm:hidden">Regresar</span>
     </button>
     <strong class="min-w-0 truncate text-sm" data-activity-viewer-title></strong>
-    <button class="col-span-2 min-h-10 justify-self-start text-sm font-bold text-secondary hover:underline sm:col-span-1 sm:justify-self-auto" type="button" data-activity-fallback>Ver directamente en Moodle</button>
   </header>
   <iframe class="size-full min-h-0 border-0 bg-white" data-activity-viewer-frame title="Actividad de la lección" allowfullscreen></iframe>
   <div class="col-start-1 row-start-2 grid place-content-center justify-items-center gap-4 bg-surface text-muted" data-activity-loading hidden>
@@ -19,36 +18,116 @@
   const viewerFrame = document.querySelector<HTMLIFrameElement>('[data-activity-viewer-frame]');
   const viewerTitle = document.querySelector<HTMLElement>('[data-activity-viewer-title]');
   const viewerClose = document.querySelector<HTMLButtonElement>('[data-activity-close]');
-  const viewerFallback = document.querySelector<HTMLButtonElement>('[data-activity-fallback]');
   const activityLoading = document.querySelector<HTMLElement>('[data-activity-loading]');
-  let activitySource = '';
+  const activityHistoryKey = '__pelActivityViewer';
+  const activityViewerWindow = window as Window & {
+    __pelActivityViewerCleanup?: () => void;
+  };
+  activityViewerWindow.__pelActivityViewerCleanup?.();
+  const activityViewerEvents = new AbortController();
+  const listenerOptions = { signal: activityViewerEvents.signal };
+  const captureListenerOptions = { ...listenerOptions, capture: true };
+  activityViewerWindow.__pelActivityViewerCleanup = () => activityViewerEvents.abort();
   let activityTrigger: HTMLButtonElement | null = null;
 
-  const closeActivity = () => {
+  // Tras una recarga el visor empieza cerrado. Quitamos cualquier estado de un
+  // visor anterior para que Atrás no intente abrir una actividad ya descartada.
+  if (history.state?.[activityHistoryKey]) {
+    const { [activityHistoryKey]: _discardedActivity, ...pageState } = history.state;
+    history.replaceState(pageState, '');
+  }
+
+  const replaceFrameSource = (source: string) => {
+    if (!viewerFrame) return;
+
+    // `src` añade una entrada al historial conjunto de la página y del iframe.
+    // `replace` conserva una sola entrada, para que Atrás cierre el visor a la
+    // primera, en lugar de recorrer primero el contenido del iframe.
+    try {
+      viewerFrame.contentWindow?.location.replace(source);
+    } catch {
+      viewerFrame.src = source;
+    }
+  };
+
+  const closeActivityView = () => {
     if (!viewer || !viewerFrame) return;
     viewer.hidden = true;
-    viewerFrame.src = 'about:blank';
+    replaceFrameSource('about:blank');
     activityLoading?.setAttribute('hidden', '');
     document.body.classList.remove('activity-open');
     activityTrigger?.focus();
   };
 
-  document.querySelectorAll<HTMLButtonElement>('[data-activity-launch]').forEach((button) => {
-    button.addEventListener('click', () => {
-      if (!viewer || !viewerFrame || !viewerTitle) return;
-      activitySource = button.dataset.activitySrc || '';
-      activityTrigger = button;
-      viewerTitle.textContent = button.dataset.activityTitle || 'Actividad';
-      viewer.hidden = false;
-      document.body.classList.add('activity-open');
-      activityLoading?.removeAttribute('hidden');
-      viewerClose?.focus();
-      requestAnimationFrame(() => { viewerFrame.src = activitySource; });
-    });
-  });
+  const closeActivity = () => {
+    // El estado adicional hace que Atrás cierre este visor, en vez de sacar al
+    // estudiante de la lección. `popstate` termina el cierre visual.
+    if (history.state?.[activityHistoryKey]) {
+      history.back();
+      return;
+    }
+    closeActivityView();
+  };
 
-  viewerFrame?.addEventListener('load', () => activityLoading?.setAttribute('hidden', ''));
-  viewerClose?.addEventListener('click', closeActivity);
-  viewerFallback?.addEventListener('click', () => { if (activitySource) window.location.assign(activitySource); });
-  document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && viewer && !viewer.hidden) closeActivity(); });
+  const openActivity = (source: string, title: string, pushHistory = true) => {
+    if (!viewer || !viewerFrame || !viewerTitle) return;
+    viewerTitle.textContent = title;
+    viewer.hidden = false;
+    document.body.classList.add('activity-open');
+    activityLoading?.removeAttribute('hidden');
+    viewerClose?.focus();
+
+    // Un mismo toque no debe apilar visores: protege el historial incluso si
+    // una recarga en caliente dejó un listener anterior activo.
+    if (pushHistory && !history.state?.[activityHistoryKey]) {
+      history.pushState({
+        ...history.state,
+        [activityHistoryKey]: { source, title },
+      }, '');
+    }
+
+    requestAnimationFrame(() => replaceFrameSource(source));
+  };
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const launchButton = target.closest<HTMLButtonElement>('[data-activity-launch]');
+    if (launchButton) {
+      // Evita que listeners antiguos de una recarga en caliente apilen otra
+      // entrada de historial para el mismo toque.
+      event.stopImmediatePropagation();
+      activityTrigger = launchButton;
+      openActivity(launchButton.dataset.activitySrc || '', launchButton.dataset.activityTitle || 'Actividad');
+      return;
+    }
+
+    if (target.closest('[data-activity-close]')) {
+      event.stopImmediatePropagation();
+      closeActivity();
+    }
+  }, captureListenerOptions);
+
+  viewerFrame?.addEventListener('load', () => activityLoading?.setAttribute('hidden', ''), listenerOptions);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && viewer && !viewer.hidden) {
+      event.stopImmediatePropagation();
+      closeActivity();
+    }
+  }, captureListenerOptions);
+  window.addEventListener('popstate', (event) => {
+    const activity = event.state?.[activityHistoryKey];
+
+    // Si el visor estaba abierto, esta navegación siempre es la vuelta a la
+    // lección, incluso si el historial contiene un estado antiguo del visor.
+    if (viewer && !viewer.hidden) {
+      closeActivityView();
+      return;
+    }
+
+    if (activity && typeof activity.source === 'string' && typeof activity.title === 'string') {
+      openActivity(activity.source, activity.title, false);
+    }
+  }, listenerOptions);
 </script>

@@ -1,0 +1,30 @@
+---
+import { imagePath } from '@/utils/resource-path';
+
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  variant?: 'content' | 'wide';
+  loading?: 'lazy' | 'eager';
+}
+
+const {
+  src,
+  alt,
+  caption,
+  variant = 'content',
+  loading = 'lazy',
+} = Astro.props;
+
+const imageSrc = imagePath(src);
+const hasCaption = Boolean(caption) || Astro.slots.has('default');
+---
+
+<figure class:list={[
+  'my-8 overflow-hidden bg-surface-raised shadow-soft',
+  variant === 'content' ? 'mx-auto max-w-3xl' : 'mx-auto max-w-5xl',
+]}>
+  <img class="block h-auto w-full" src={imageSrc} alt={alt} loading={loading} decoding="async" />
+  {hasCaption && <figcaption class="border-t border-border px-4 py-3 text-sm leading-6 text-muted sm:px-5">{caption}<slot /></figcaption>}
+</figure>

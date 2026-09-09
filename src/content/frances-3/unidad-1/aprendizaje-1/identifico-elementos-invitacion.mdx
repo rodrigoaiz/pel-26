@@ -16,7 +16,109 @@ kind: dialogue
 ---
 
 import LessonSection from '@/components/lesson/LessonSection.astro';
+import LessonImage from '@/components/lesson/LessonImage.astro';
+import Accordion from '@/components/ui/Accordion.astro';
+import H5PActivity from '@/components/lesson/H5PActivity.astro';
+import ActivityLauncher from '@/components/lesson/ActivityLauncher.astro';
+import MoodleAction from '@/components/lesson/MoodleAction.astro';
 
-<LessonSection id="contenido" phase="Aprende" title="Elementos de una invitación" intro="Esta pantalla preparará el vocabulario y los elementos que aparecen en una invitación escrita.">
-  <p>Contenido base pendiente de desarrollo.</p>
+<LessonSection phase="Aprende" title="Elementos de una invitación pero con titulo super largo para que se muestre correctamente" intro="Esta pantalla preparará el vocabulario y los elementos que aparecen en una invitación escrita.">
+
+  # Titulo h1 del contenido
+
+  A continuación, se muestra el contenido principal de la pantalla.
+
+  ## Subtítulo del contenido
+
+  lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+  ### Subtítulo del contenido h3
+
+  Otro párrafo.
+
+  #### Nivel más específico
+
+  - Elemento de lista
+  - Otro elemento
+
+  1. Primer paso
+  2. Segundo paso
+
+  <ol>
+    <li>Primer paso</li>
+    <li>Segundo paso</li>
+  </ol>
+
+  <LessonImage
+    src="images/frances-3/unidad-1/frances-paris-hero-v1.png"
+    alt="Ilustración de París como ejemplo de una imagen editorial para la lección"
+  >
+    <em>Imagen de ejemplo:</em> reemplázala por el recurso correspondiente a esta lección.
+  </LessonImage>
+
+  <Accordion id="invitacion-informacion" title="¿Qué información aparece en una invitación?" open>
+    <p>Una invitación suele responder preguntas básicas para que la otra persona pueda organizarse.</p>
+    <ul>
+      <li>Qué actividad se propone.</li>
+      <li>Cuándo y dónde tendrá lugar.</li>
+      <li>Quién invita y cómo confirmar la asistencia.</li>
+    </ul>
+  </Accordion>
+
+  <Accordion id="invitacion-ejemplo" title="Observar un ejemplo visual">
+    <p>Busca primero la fecha, la hora y el lugar. Después identifica la actividad y la forma de responder.</p>
+    <LessonImage
+      src="images/frances-3/unidad-1/frances-paris-hero-v1.png"
+      alt="Ejemplo visual de una escena parisina para acompañar la invitación"
+      variant="wide"
+      caption="Ejemplo de imagen dentro de un acordeón."
+    />
+  </Accordion>
+
+  <Accordion id="invitacion-respuesta" title="¿Cómo puedo responder?">
+    <p>Puedes aceptar, rechazar o proponer otra fecha con una fórmula breve y clara.</p>
+    <ol>
+      <li>Agradece la invitación.</li>
+      <li>Indica si puedes asistir.</li>
+      <li>Propón una alternativa si es necesario.</li>
+    </ol>
+    <LessonImage
+      src="images/frances-3/unidad-1/frances-paris-hero-v1.png"
+      alt="Ilustración de apoyo para practicar una respuesta a una invitación"
+      caption="El contenido puede combinar texto, listas e imágenes."
+    />
+  </Accordion>
+
+</LessonSection>
+
+<H5PActivity
+  file="demo-act-1.html"
+  title="Ejemplo de actividad H5P"
+  description="Este bloque muestra cómo se integra una actividad interactiva dentro del recorrido. El archivo y el texto se reemplazarán por los de la lección real."
+/>
+
+<LessonSection phase="Amplía" title="Contenido después de H5P" intro="La actividad interactiva puede estar seguida de una explicación, una retroalimentación o un nuevo recurso.">
+  <div class="rounded-panel bg-surface-raised p-6 sm:p-8">
+    <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Ejemplo de continuación</p>
+    <p class="mb-0 mt-4 text-base leading-7 text-muted">Aquí puede ir contenido para aclarar lo practicado, proponer una nueva consigna o enlazar con el siguiente momento de la lección.</p>
+  </div>
+</LessonSection>
+
+<LessonSection phase="Practica" title="Ejemplo de actividades breves" intro="Las prácticas cortas también pueden vivir dentro del contenido de la pantalla.">
+  <ActivityLauncher file="demo-act-3.html" title="Ejemplo de práctica H5P" label="Abrir práctica breve" />
+  <ActivityLauncher file="demo-act-11.html" title="Ejemplo de segunda práctica H5P" label="Abrir segunda práctica" />
+</LessonSection>
+
+<MoodleAction
+  activityKey="u1a1"
+  title="Ejemplo de actividad en Moodle"
+  description="Este cierre indica cuándo una actividad continúa en Moodle. La actividad vinculada se sustituirá al cargar el contenido definitivo."
+  buttonLabel="Abrir actividad en Moodle"
+/>
+
+<LessonSection phase="Cierra" title="Contenido después de Moodle" intro="Una actividad externa no tiene que ser el final de la pantalla.">
+  <div class="rounded-panel bg-warm-soft p-6 sm:p-8">
+    <p class="m-0 text-xs font-bold uppercase tracking-widest text-primary">Ejemplo de cierre</p>
+    <p class="mb-0 mt-4 text-base leading-7 text-muted">Aquí puede ir una reflexión, una instrucción para revisar el resultado en Moodle o la preparación para la siguiente actividad.</p>
+  </div>
 </LessonSection>

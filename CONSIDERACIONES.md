@@ -40,9 +40,20 @@ src/
   pages/          Composicion de rutas
   styles/         Tokens y estilos globales
 public/
-  assets/         Recursos publicos compartidos
+  assets/         Recursos publicos compartidos (marca, iconos)
+    brand/        Logos y recursos de identidad
   h5p/            Actividades H5P estaticas
+    frances-1/    Actividades de Frances I, agrupadas por unidad
+    frances-3/    Actividades de Frances III, agrupadas por unidad
+    shared/       Actividades reutilizables entre asignaturas
   images/         Imagenes del curso
+    frances-1/    Imagenes de Frances I, agrupadas por unidad
+    frances-3/    Imagenes de Frances III, agrupadas por unidad
+    shared/       Imagenes compartidas entre asignaturas
+  docs/           PDFs y documentos descargables
+    frances-1/    Documentos de Frances I
+    frances-3/    Documentos de Frances III
+    shared/       Documentos compartidos
 ```
 
 La regla de organizacion es mantener el contenido pedagogico en MDX, los componentes de interfaz en `src/components`, los metadatos en `src/data` y las paginas `.astro` como composicion de rutas.
@@ -105,12 +116,24 @@ El sitio generado es estatico. La autenticacion, sesion, calificaciones, foros y
 
 ## H5P
 
-Las actividades usadas actualmente estan en `public/h5p/`. Para agregar una actividad:
+Las actividades usadas actualmente estan agrupadas por asignatura y unidad, por ejemplo `public/h5p/frances-1/unidad-2/`. Para agregar una actividad:
 
-1. Añadir el recurso HTML a `public/h5p/`.
-2. Referenciarlo desde el componente o la leccion correspondiente.
+1. Añadir el recurso HTML a la carpeta de su asignatura y unidad.
+2. Referenciarlo desde el componente o la leccion correspondiente. Los alias conocidos (`u2-act-1.html`, `demo-act-1.html`, etc.) se resuelven en `src/utils/resource-path.ts`; también se aceptan rutas completas relativas a `h5p/`.
 3. Ejecutar `npm run build:production`.
-4. Confirmar que el recurso aparece dentro de `dist/plan-actualizado/h5p/`.
+4. Confirmar que el recurso aparece dentro de `dist/plan-actualizado/h5p/<asignatura>/<unidad>/`.
+
+## Documentos descargables
+
+Los PDFs y otros documentos se guardan en `public/docs/<asignatura>/<unidad>/`. Para generar un enlace desde un componente Astro, usar `documentPath` desde `src/utils/resource-path.ts`:
+
+```ts
+import { documentPath } from '@/utils/resource-path';
+
+const href = documentPath('frances-3/unidad-1/guia-de-invitaciones.pdf');
+```
+
+En MDX puede usarse el enlace resultante desde un componente reutilizable con `download` para indicar la descarga.
 
 ## Pendientes conocidos
 

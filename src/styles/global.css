@@ -43,6 +43,10 @@
   background: var(--pel-hero-overlay);
 }
 
+@utility lesson-hero-atmosphere {
+  background: var(--pel-lesson-hero-atmosphere);
+}
+
 html {
   scrollbar-gutter: stable;
 }
@@ -66,8 +70,14 @@ html {
   --pel-highlight: #f4c342;
   --pel-ring: #168f89;
   --pel-hero-overlay:
-    linear-gradient(0deg, rgb(243 241 234 / 0.98) 0%, rgb(255 253 248 / 0.7) 46%, rgb(255 253 248 / 0.08) 82%),
-    linear-gradient(90deg, rgb(255 253 248 / 0.94) 0%, rgb(255 253 248 / 0.7) 58%, rgb(255 253 248 / 0.18) 100%);
+    radial-gradient(ellipse 62% 105% at -8% 8%, rgb(232 95 61 / 0.3) 0%, rgb(244 195 66 / 0.13) 42%, transparent 72%),
+    radial-gradient(ellipse 42% 66% at 58% 6%, rgb(22 143 137 / 0.16) 0%, transparent 74%),
+    linear-gradient(102deg, rgb(255 253 248 / 0.97) 0%, rgb(255 253 248 / 0.88) 32%, rgb(255 253 248 / 0.5) 54%, rgb(243 241 234 / 0.08) 77%, transparent 100%),
+    linear-gradient(0deg, rgb(243 241 234 / 0.72) 0%, transparent 48%);
+  --pel-lesson-hero-atmosphere:
+    radial-gradient(ellipse 52% 160% at 102% -38%, rgb(22 143 137 / 0.3) 0%, rgb(22 143 137 / 0.1) 46%, transparent 73%),
+    radial-gradient(ellipse 42% 112% at 76% 120%, rgb(232 95 61 / 0.22) 0%, transparent 74%),
+    linear-gradient(118deg, transparent 38%, rgb(244 195 66 / 0.08) 62%, transparent 82%);
   color-scheme: light;
 }
 
@@ -90,22 +100,31 @@ html {
   --pel-highlight: #f0c85a;
   --pel-ring: #65cec5;
   --pel-hero-overlay:
-    linear-gradient(90deg, rgb(4 21 34 / 0.96) 0%, rgb(4 21 34 / 0.8) 48%, rgb(4 21 34 / 0.1) 100%),
-    linear-gradient(0deg, rgb(4 21 34 / 0.72) 0%, transparent 60%);
+    radial-gradient(ellipse 62% 105% at -8% 8%, rgb(255 132 100 / 0.26) 0%, transparent 66%),
+    radial-gradient(ellipse 42% 66% at 58% 6%, rgb(101 206 197 / 0.18) 0%, transparent 72%),
+    linear-gradient(102deg, rgb(4 21 34 / 0.97) 0%, rgb(4 21 34 / 0.86) 39%, rgb(4 21 34 / 0.48) 61%, rgb(4 21 34 / 0.1) 81%, transparent 100%),
+    linear-gradient(0deg, rgb(4 21 34 / 0.76) 0%, transparent 58%);
+  --pel-lesson-hero-atmosphere:
+    radial-gradient(ellipse 48% 150% at 102% -36%, rgb(101 206 197 / 0.21) 0%, transparent 72%),
+    radial-gradient(ellipse 38% 105% at 76% 120%, rgb(255 132 100 / 0.13) 0%, transparent 72%);
   color-scheme: dark;
 }
 
 @media (min-width: 48rem) {
   :root {
     --pel-hero-overlay:
-      linear-gradient(90deg, rgb(255 253 248 / 0.98) 0%, rgb(255 253 248 / 0.9) 36%, rgb(255 253 248 / 0.34) 59%, rgb(255 253 248 / 0) 78%),
-      linear-gradient(0deg, rgb(243 241 234 / 0.9) 0%, rgb(243 241 234 / 0.12) 28%, transparent 52%);
+      radial-gradient(ellipse 56% 118% at -6% 10%, rgb(232 95 61 / 0.28) 0%, rgb(244 195 66 / 0.12) 42%, transparent 70%),
+      radial-gradient(ellipse 36% 76% at 57% 4%, rgb(22 143 137 / 0.16) 0%, transparent 72%),
+      linear-gradient(102deg, rgb(255 253 248 / 0.97) 0%, rgb(255 253 248 / 0.88) 34%, rgb(255 253 248 / 0.5) 55%, rgb(255 253 248 / 0.1) 76%, transparent 100%),
+      linear-gradient(0deg, rgb(243 241 234 / 0.78) 0%, rgb(243 241 234 / 0.08) 31%, transparent 54%);
   }
 
   [data-theme='dark'] {
     --pel-hero-overlay:
-      linear-gradient(90deg, rgb(4 21 34 / 0.96) 0%, rgb(4 21 34 / 0.8) 48%, rgb(4 21 34 / 0.1) 100%),
-      linear-gradient(0deg, rgb(4 21 34 / 0.72) 0%, transparent 60%);
+      radial-gradient(ellipse 56% 118% at -6% 10%, rgb(255 132 100 / 0.24) 0%, transparent 66%),
+      radial-gradient(ellipse 36% 76% at 57% 4%, rgb(101 206 197 / 0.18) 0%, transparent 70%),
+      linear-gradient(102deg, rgb(4 21 34 / 0.97) 0%, rgb(4 21 34 / 0.84) 43%, rgb(4 21 34 / 0.44) 64%, rgb(4 21 34 / 0.08) 82%, transparent 100%),
+      linear-gradient(0deg, rgb(4 21 34 / 0.78) 0%, transparent 60%);
   }
 }
 
@@ -125,7 +144,7 @@ html {
   h1,
   h2,
   h3 {
-    @apply font-display text-balance;
+    @apply font-display;
   }
 
   button,

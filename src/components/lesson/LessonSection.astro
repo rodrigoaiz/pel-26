@@ -13,16 +13,131 @@ const { id, phase, title, intro, tone = 'default' } = Astro.props;
 ---
 
 <section id={id} class:list={['border-b border-border py-14 sm:py-18', tone === 'soft' ? 'bg-surface' : 'bg-background']} data-reveal>
-  <Container class="grid gap-6 lg:grid-cols-[10rem_1fr] lg:gap-10">
-    <div>
-      <span class="inline-flex min-h-8 items-center rounded-lg bg-secondary-soft px-3 text-xs font-bold uppercase tracking-widest text-secondary">{phase}</span>
-    </div>
-    <div class="min-w-0">
-      <h2 class="m-0 max-w-3xl font-display text-4xl font-black leading-none tracking-section sm:text-5xl">{title}</h2>
-      {intro && <p class="mt-4 max-w-2xl text-base leading-7 text-muted">{intro}</p>}
-      <div class="mt-8">
-        <slot />
+  <Container>
+    <div class="grid gap-6 lg:grid-cols-[10rem_1fr] lg:gap-10">
+      <div>
+        <span class="inline-flex min-h-8 items-center rounded-lg bg-secondary-soft px-3 text-xs font-bold uppercase tracking-widest text-secondary">{phase}</span>
       </div>
+      <div class="min-w-0">
+        <h2 class="m-0 text-wrap font-display text-4xl font-black leading-none tracking-section sm:text-5xl">{title}</h2>
+        {intro && <p class="mt-4 max-w-prose text-base leading-7 text-muted">{intro}</p>}
+      </div>
+    </div>
+    <div class="lesson-content mx-auto mt-8 w-full lg:mt-10">
+      <slot />
     </div>
   </Container>
 </section>
+
+<style>
+  .lesson-content :global(> p),
+  .lesson-content :global(> ul),
+  .lesson-content :global(> ol),
+  .lesson-content :global(> h1),
+  .lesson-content :global(> h2),
+  .lesson-content :global(> h3),
+  .lesson-content :global(> h4),
+  .lesson-content :global(> h5),
+  .lesson-content :global(> h6) {
+    width: min(100%, 65ch);
+    max-width: 65ch;
+    margin-inline: auto;
+  }
+
+  .lesson-content :global(> h1),
+  .lesson-content :global(> h2),
+  .lesson-content :global(> h3),
+  .lesson-content :global(> h4),
+  .lesson-content :global(> h5),
+  .lesson-content :global(> h6) {
+    width: min(100%, 42rem);
+    max-width: 42rem;
+    margin-inline: auto;
+    margin-bottom: 0.75rem;
+    color: var(--pel-foreground);
+  }
+
+  .lesson-content :global(> h1) {
+    margin-top: 2.5rem;
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    line-height: 0.94;
+    font-weight: 900;
+    letter-spacing: -0.025em;
+  }
+
+  .lesson-content :global(> h2) {
+    margin-top: 2.5rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 2px solid var(--pel-secondary-soft);
+    font-size: clamp(1.875rem, 4vw, 2.5rem);
+    line-height: 0.98;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .lesson-content :global(> h3) {
+    margin-top: 2.5rem;
+    font-size: clamp(1.625rem, 3vw, 2rem);
+    line-height: 1.02;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    border-inline-start: 0.25rem solid var(--pel-secondary);
+    padding-inline-start: 0.85rem;
+    color: var(--pel-foreground);
+  }
+
+  .lesson-content :global(> h4) {
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    line-height: 1.15;
+    font-weight: 800;
+    color: var(--pel-secondary);
+  }
+
+  .lesson-content :global(> h5) {
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.3;
+    font-weight: 800;
+    color: var(--pel-foreground);
+  }
+
+  .lesson-content :global(> h6) {
+    margin-top: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--pel-secondary);
+  }
+
+  .lesson-content :global(> p:not([class])) {
+    margin-block: 1rem;
+    line-height: 1.75;
+  }
+
+  .lesson-content :global(> ul:not([class])) {
+    display: grid;
+    gap: 0.65rem;
+    margin-block: 1.25rem;
+    list-style: disc;
+    padding-left: 1.5rem;
+    line-height: 1.65;
+  }
+
+  .lesson-content :global(> ol:not([class])) {
+    display: grid;
+    gap: 0.65rem;
+    margin-block: 1.25rem;
+    list-style: decimal;
+    padding-left: 1.5rem;
+    line-height: 1.65;
+  }
+
+  .lesson-content :global(> ul:not([class]) li::marker),
+  .lesson-content :global(> ol:not([class]) li::marker) {
+    color: var(--pel-secondary);
+    font-weight: 800;
+  }
+</style>

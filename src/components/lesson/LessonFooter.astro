@@ -5,7 +5,20 @@ import { sitePath } from '@/utils/site-path';
 const { coursePath = 'frances-1', nextHref, nextLabel = 'Siguiente lección' } = Astro.props;
 ---
 
-<nav class="grid gap-3 border-t border-border py-8 sm:grid-cols-2" aria-label="Continuar en la asignatura">
-  <a class="inline-flex min-h-12 items-center gap-3 rounded-xl px-3 font-bold no-underline transition hover:bg-secondary-soft hover:text-secondary" href={sitePath(`${coursePath}/`)}><ArrowIcon direction="left" />Ver todas las unidades</a>
-  {nextHref && <a class="inline-flex min-h-12 items-center justify-between gap-3 rounded-xl bg-warm-soft px-4 font-bold text-primary no-underline transition hover:bg-primary hover:text-on-primary sm:justify-self-end" href={nextHref}>{nextLabel}<ArrowIcon /></a>}
-</nav>
+<footer class="border-t border-border">
+  <nav class="grid gap-3 py-8 sm:grid-cols-2" aria-label="Continuar en la asignatura">
+    <a class="inline-flex min-h-12 items-center gap-3 rounded-xl px-3 font-bold no-underline transition hover:bg-secondary-soft hover:text-secondary" href={sitePath(`${coursePath}/`)}><ArrowIcon direction="left" />Ver todas las unidades</a>
+    {nextHref && <a class="inline-flex min-h-12 items-center justify-between gap-3 rounded-xl bg-warm-soft px-4 font-bold text-primary no-underline transition hover:bg-primary hover:text-on-primary sm:justify-self-end" href={nextHref}>{nextLabel}<ArrowIcon /></a>}
+  </nav>
+
+  <div class="flex flex-col gap-4 border-t border-border/70 py-6 text-xs leading-5 text-muted sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-center gap-3">
+      <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-navy font-display text-[10px] font-black tracking-wide text-on-navy" aria-hidden="true">PEL</span>
+      <p class="m-0"><strong class="text-foreground">Francés · Programas de Estudio en Línea</strong><span class="hidden sm:inline"> · CCH · UNAM</span></p>
+    </div>
+    <nav class="flex gap-4 font-semibold" aria-label="Enlaces institucionales">
+      <a class="text-muted no-underline transition hover:text-secondary" href="https://portalacademico.cch.unam.mx/aviso-legal">Aviso legal</a>
+      <a class="text-muted no-underline transition hover:text-secondary" href="https://www.cch.unam.mx/calendario-escolar">Calendario</a>
+    </nav>
+  </div>
+</footer>

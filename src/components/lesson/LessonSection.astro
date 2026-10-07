@@ -13,16 +13,16 @@ interface Props {
 const { id, phase, title, intro, tone = 'default', fullWidth = false } = Astro.props;
 ---
 
-<section id={id} class:list={['border-b border-border py-10 sm:py-12', tone === 'soft' ? 'bg-surface' : 'bg-background']} data-reveal>
+<section id={id} class:list={['border-b border-border pt-10 pb-6 sm:pt-12 sm:pb-8', tone === 'soft' ? 'bg-surface' : 'bg-background']} data-reveal>
   <Container>
     {(phase || title) && (
       <div class="grid gap-6 lg:grid-cols-[10rem_1fr] lg:gap-10">
         <div>
-          {phase && <span class="inline-flex min-h-8 items-center rounded-lg bg-secondary-soft px-3 text-xs font-bold uppercase tracking-widest text-secondary">{phase}</span>}
+          {phase && <span class="inline-flex min-h-6 items-center rounded-lg bg-secondary-soft px-2 text-xs font-bold uppercase tracking-widest text-secondary">{phase}</span>}
         </div>
         <div class="min-w-0">
-          {title && <h2 class="m-0 text-wrap font-display text-4xl font-black leading-none tracking-section sm:text-5xl">{title}</h2>}
-          {intro && <p class="mt-4 max-w-prose text-base leading-7 text-muted">{intro}</p>}
+          {title && <h2 class="m-0 text-wrap font-display text-3xl font-bold leading-none tracking-section sm:text-4xl" style="color: var(--pel-primary)">{title}</h2>}
+          {intro && <p class="mt-4 text-base leading-7 text-muted">{intro}</p>}
         </div>
       </div>
     )}
@@ -33,17 +33,16 @@ const { id, phase, title, intro, tone = 'default', fullWidth = false } = Astro.p
 </section>
 
 <style>
-  .lesson-content :global(> p),
+  .lesson-content :global(> p) {
+    width: min(100%, 47ch);
+    max-width: 47ch;
+    margin-inline: auto;
+  }
+
   .lesson-content :global(> ul),
-  .lesson-content :global(> ol),
-  .lesson-content :global(> h1),
-  .lesson-content :global(> h2),
-  .lesson-content :global(> h3),
-  .lesson-content :global(> h4),
-  .lesson-content :global(> h5),
-  .lesson-content :global(> h6) {
-    width: min(100%, 65ch);
-    max-width: 65ch;
+  .lesson-content :global(> ol) {
+    width: min(100%, 55ch);
+    max-width: 55ch;
     margin-inline: auto;
   }
 
@@ -67,8 +66,7 @@ const { id, phase, title, intro, tone = 'default', fullWidth = false } = Astro.p
   .lesson-content :global(> h4),
   .lesson-content :global(> h5),
   .lesson-content :global(> h6) {
-    width: min(100%, 42rem);
-    max-width: 42rem;
+    width: 100%;
     margin-inline: auto;
     margin-bottom: 0.75rem;
     color: var(--pel-foreground);

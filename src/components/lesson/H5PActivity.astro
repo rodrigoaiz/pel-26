@@ -10,17 +10,19 @@ interface Props {
   descriptionEn?: string;
   nextHref?: string;
   nextLabel?: string;
+  variant?: 1 | 2;
 }
 
-const { file, title, description, descriptionEn, nextHref, nextLabel } = Astro.props;
+const { file, title, description, descriptionEn, nextHref, nextLabel, variant = 1 } = Astro.props;
 const src = h5pPath(file);
+const bgColor = variant === 1 ? 'bg-navy' : 'bg-slate-900';
 ---
 
-<section class="relative left-1/2 w-screen -translate-x-1/2 bg-navy py-14 text-on-navy sm:py-18" data-reveal>
+<section class:list={['relative left-1/2 w-screen -translate-x-1/2 py-14 text-on-navy sm:py-18', bgColor]} data-reveal>
   <Container>
     <div>
-      <h2 class="max-w-2xl font-display text-4xl font-black leading-none tracking-section sm:text-5xl">{title}</h2>
-      <div class="mt-4 max-w-prose">
+      <h2 class="max-w-4xl font-display text-3xl font-bold leading-none tracking-section sm:text-4xl">{title}</h2>
+      <div class="mt-4 max-w-4xl">
         <p class="m-0 text-base font-semibold leading-7 text-on-navy">{description}</p>
         {descriptionEn && <p class="m-0 mt-2 text-sm leading-6 text-on-navy/60">{descriptionEn}</p>}
       </div>

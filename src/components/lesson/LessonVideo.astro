@@ -1,0 +1,53 @@
+---
+interface Props {
+  url: string;
+  title?: string;
+  description?: string;
+  width?: number;
+  height?: number;
+}
+
+const {
+  url,
+  title = 'Video',
+  description,
+  width = 560,
+  height = 315,
+} = Astro.props;
+
+// Extract video ID from various YouTube URL formats
+function extractVideoId(input: string): string {
+  // Handle youtube.com/watch?v=ID format
+  const youtubeMatch = input.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+  if (youtubeMatch) {
+    return youtubeMatch[1];
+  }
+  // If it's already just an ID
+  if (input.length === 11 && !input.includes('/')) {
+    return input;
+  }
+  throw new Error(`Could not extract video ID from: ${input}`);
+}
+
+const videoId = extractVideoId(url);
+const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+const aspectRatio = (height / width) * 100;
+---
+
+<figure class="my-8 overflow-hidden bg-surface-raised shadow-soft mx-auto max-w-3xl">
+  <div class="relative" style={`padding-bottom: ${aspectRatio}%`}>
+    <iframe
+      class="absolute inset-0 h-full w-full"
+      src={embedUrl}
+      title={title}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    />
+  </div>
+  {(title || description) && (
+    <figcaption class="border-t border-border px-4 py-3 text-sm leading-6 text-muted sm:px-5">
+      {title && <div class="font-semibold">{title}</div>}
+      {description && <div class="mt-1">{description}</div>}
+    </figcaption>
+  )}
+</figure>

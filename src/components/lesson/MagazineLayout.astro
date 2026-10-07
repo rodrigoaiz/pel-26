@@ -1,0 +1,111 @@
+---
+import { imagePath } from '@/utils/resource-path';
+
+interface Props {
+  imageSrc: string;
+  imageAlt: string;
+  imageCaption?: string;
+}
+
+const { imageSrc, imageAlt, imageCaption } = Astro.props;
+const resolvedImageSrc = imagePath(imageSrc);
+---
+
+<div class="magazine-layout">
+  <div class="magazine-container">
+    <div class="magazine-image">
+      <img src={resolvedImageSrc} alt={imageAlt} loading="lazy" decoding="async" />
+      {imageCaption && <p class="image-caption">{imageCaption}</p>}
+    </div>
+    <div class="magazine-content">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .magazine-layout {
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .magazine-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 248, 0.95) 100%);
+    padding: 2rem;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    border-radius: 2px;
+  }
+
+  .magazine-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .magazine-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 3px solid #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .image-caption {
+    margin-top: 0.75rem;
+    padding: 0.5rem 0;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #666;
+    text-align: center;
+    border-top: 1px solid #d0d0d0;
+  }
+
+  .magazine-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem 0;
+  }
+
+  .magazine-content :global(p) {
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #333;
+    text-align: justify;
+    max-width: none !important;
+  }
+
+  .magazine-content :global(p:first-child) {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #222;
+    margin-top: 0;
+  }
+
+  .magazine-content :global(cite) {
+    display: block;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid #d0d0d0;
+    font-size: 0.75rem;
+    color: #999;
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .magazine-container {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .magazine-content :global(p) {
+      text-align: left;
+    }
+  }
+</style>

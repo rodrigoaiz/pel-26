@@ -10,15 +10,17 @@ interface Props {
 }
 
 const { course, navigation } = Astro.props;
+const learningCount = Object.values(navigation.learningGroupsByUnit).reduce((count, groups) => count + groups.length, 0);
 ---
 
 <main>
   <CourseHero
     title={course.heroTitle}
     description={course.description}
-    ctaLabel={course.ctaLabel}
+    courseSlug={course.slug}
+    ctaLabel={`Empezar por la ${navigation.units[0]?.title ?? 'Unidad 1'}`}
     ctaHref={navigation.firstLessonHref}
-    progressLabel={course.status}
+    progressLabel={`${navigation.units.length} unidades · ${learningCount} aprendizajes · ${navigation.screens.length} pantallas`}
   />
   <UnitList
     units={navigation.units}
@@ -28,5 +30,6 @@ const { course, navigation } = Astro.props;
     coursePath={course.slug}
     featuredUnitId={navigation.featuredUnitId}
     featuredHref={navigation.firstLessonHref}
+    bilingual={course.bilingual}
   />
 </main>

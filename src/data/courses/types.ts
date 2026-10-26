@@ -12,7 +12,8 @@ export type Course = {
   description?: string;
   status?: string;
   heroTitle?: string;
-  ctaLabel?: string;
+  // Títulos "Français - Español": las listas muestran una sola versión (ver shortTitle).
+  bilingual?: boolean;
 };
 
 export type LessonScreen = {

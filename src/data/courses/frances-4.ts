@@ -7,5 +7,5 @@ export const frances4 = {
   description: 'Al finalizar el semestre, el alumnado integrará adecuadamente la descripción de circunstancias y los hechos para contar una experiencia personal. También podrá comparar el pasado con su presente.',
   status: 'Contenidos',
   heroTitle: 'Francés IV: Capacidad para la expresión en pasado.',
-  ctaLabel: 'Final del trayecto'
+  bilingual: true
 } satisfies Course;

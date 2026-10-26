@@ -26,14 +26,15 @@ const learningLabel = `Aprendizaje ${entry.data.learning.order}`;
 
 <BaseLayout title={`${entry.data.title} · ${course.title}`} description={entry.data.subtitle}>
   <main class="min-h-screen bg-background" data-lesson-root>
-    <LessonHeader coursePath={course.slug} courseName={course.title} />
+    <LessonHeader coursePath={course.slug} courseName={course.title} screens={navigation.learningScreens} position={navigation.screenPosition} learningLabel={learningLabel} />
     <LessonIndex
-      lessons={navigation.lessons}
       currentSlug={navigation.currentSlug}
+      currentLearningId={entry.data.learning.id}
       unitLabel={unitLabel}
       unitTitle={entry.data.unit.title}
       learningGroups={navigation.learningGroups}
       unitLinks={navigation.unitLinks}
+      bilingual={course.bilingual}
     />
     <article>
       <LessonHero
@@ -41,18 +42,22 @@ const learningLabel = `Aprendizaje ${entry.data.learning.order}`;
         unitLabel={unitLabel}
         unitTitle={entry.data.unit.title}
         learningLabel={learningLabel}
-        description={entry.data.subtitle}
       />
       <Content />
       <Container>
         <LessonFooter
           coursePath={course.slug}
+          prevHref={navigation.prevLesson?.href}
+          prevLabel={navigation.prevLesson?.title}
           nextHref={navigation.nextLesson?.href}
-          nextLabel={navigation.nextLesson && `Siguiente: ${navigation.nextLesson.title}`}
+          nextLabel={navigation.nextLesson?.title}
         />
       </Container>
     </article>
     <ActivityViewer />
   </main>
   <LessonIndexController />
+  <script is:inline define:vars={{ key: `pel:last:${course.slug}`, last: { href: Astro.url.pathname, label: `${unitLabel} · ${learningLabel} · Pantalla ${navigation.screenPosition}` } }}>
+    try { localStorage.setItem(key, JSON.stringify(last)); } catch {}
+  </script>
 </BaseLayout>

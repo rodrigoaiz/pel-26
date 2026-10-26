@@ -17,7 +17,7 @@ export function imagePath(path: string) {
 
   const normalized = path.replace(/^\/+/, '');
   if (normalized.startsWith('images/')) return sitePath(normalized);
-  if (normalized.startsWith('frances-')) return sitePath(`images/${normalized}`);
+  if (normalized.startsWith('frances-') || normalized.startsWith('shared/')) return sitePath(`images/${normalized}`);
   return sitePath(`images/shared/${normalized}`);
 }
 
@@ -39,6 +39,6 @@ export function documentPath(path: string) {
 
   const normalized = path.replace(/^\/+/, '');
   if (normalized.startsWith('docs/')) return sitePath(normalized);
-  if (normalized.startsWith('frances-')) return sitePath(`docs/${normalized}`);
+  if (normalized.startsWith('frances-') || normalized.startsWith('shared/')) return sitePath(`docs/${normalized}`);
   return sitePath(`docs/shared/${normalized}`);
 }

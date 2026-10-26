@@ -1,18 +1,42 @@
 ---
 import Container from '@/components/ui/Container.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
+import ArrowIcon from '@/components/ui/ArrowIcon.astro';
 import { sitePath } from '@/utils/site-path';
-const { coursePath = 'frances-1', courseName = 'Francés I' } = Astro.props;
+import type { LessonScreen } from '@/data/courses/types';
+
+interface Props {
+  coursePath?: string;
+  courseName?: string;
+  screens?: LessonScreen[];
+  position?: number;
+  learningLabel?: string;
+}
+
+const { coursePath = 'frances-1', courseName = 'Francés I', screens = [], position = 1, learningLabel = 'este aprendizaje' } = Astro.props;
+// Anterior/siguiente dentro del aprendizaje; el pie de página cruza aprendizajes y unidades.
+const prev = screens[position - 2];
+const next = screens[position];
+const stepClass = 'grid size-9 shrink-0 place-items-center rounded-lg border border-border bg-surface transition hover:border-secondary hover:bg-secondary-soft hover:text-secondary';
 ---
 
 <header class="sticky top-0 z-30 border-b border-border/80 bg-surface/95 backdrop-blur-md">
-  <Container class="flex min-h-16 items-center justify-between gap-3 py-2">
+  <Container class="flex min-h-16 items-center justify-between gap-2 py-2 sm:gap-4">
     <a class="inline-flex min-h-10 min-w-0 items-center gap-2 rounded-lg font-bold no-underline hover:text-secondary" href={sitePath(`${coursePath}/`)} aria-label={`Volver a ${courseName}`}>
       <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 6-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-      <span class="truncate">{courseName}</span>
+      <span class="hidden truncate sm:inline">{courseName}</span>
     </a>
+    {screens.length > 1 && <nav class="flex items-center gap-1" aria-label={`Pantallas de ${learningLabel}`}>
+      <a class:list={[stepClass, !prev && 'pointer-events-none opacity-30']} href={prev?.href} aria-label="Pantalla anterior" aria-disabled={!prev || undefined}><ArrowIcon direction="left" class="size-4" /></a>
+      <p class="m-0 min-w-14 text-center leading-tight">
+        <span class="hidden text-sm font-semibold text-muted sm:inline">{learningLabel} · </span>
+        <span class="block text-[10px] font-bold uppercase tracking-widest text-muted sm:inline sm:text-sm sm:normal-case sm:tracking-normal sm:text-secondary">Pantalla</span>
+        <span class="text-sm font-bold text-secondary"> {position} de {screens.length}</span>
+      </p>
+      <a class:list={[stepClass, !next && 'pointer-events-none opacity-30']} href={next?.href} aria-label="Pantalla siguiente" aria-disabled={!next || undefined}><ArrowIcon class="size-4" /></a>
+    </nav>}
     <div class="flex items-center gap-2">
-      <a class="hidden min-h-10 items-center rounded-xl px-3 text-sm font-bold text-muted no-underline transition hover:bg-secondary-soft hover:text-secondary sm:inline-flex" href="/?theme=moove">Mis cursos</a>
+      <a class="hidden min-h-10 items-center rounded-xl px-3 text-sm font-bold text-muted no-underline transition hover:bg-secondary-soft hover:text-secondary lg:inline-flex" href="/?theme=moove">Mis cursos</a>
       <ThemeToggle />
       <button class="inline-flex min-h-10 items-center gap-2 rounded-xl border border-border bg-surface px-3 text-sm font-bold transition hover:border-secondary hover:bg-secondary-soft" type="button" aria-expanded="false" aria-controls="lesson-index" data-index-toggle>
         Índice
@@ -20,4 +44,7 @@ const { coursePath = 'frances-1', courseName = 'Francés I' } = Astro.props;
       </button>
     </div>
   </Container>
+  {screens.length > 1 && <div class="absolute inset-x-0 bottom-0 flex h-1 gap-px" aria-hidden="true">
+    {screens.map((_, index) => <span class:list={['flex-1', index < position ? 'bg-primary' : 'bg-border/60']}></span>)}
+  </div>}
 </header>

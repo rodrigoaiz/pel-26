@@ -3,6 +3,7 @@ import type { CourseUnit, LearningGroup, Lesson } from '@/data/courses/types';
 import Container from '@/components/ui/Container.astro';
 import ArrowIcon from '@/components/ui/ArrowIcon.astro';
 import { sitePath } from '@/utils/site-path';
+import { shortTitle } from '@/utils/bilingual-title';
 
 interface Props {
   units: CourseUnit[];
@@ -12,6 +13,7 @@ interface Props {
   coursePath?: string;
   featuredUnitId?: string;
   featuredHref?: string;
+  bilingual?: boolean;
 }
 
 const {
@@ -21,16 +23,14 @@ const {
   learningGroupsByUnit = {},
   coursePath = 'frances-1',
   featuredUnitId,
-  featuredHref
+  featuredHref,
+  bilingual
 } = Astro.props;
 ---
 
 <section class="py-16 sm:py-20" aria-labelledby="units-title">
   <Container>
-    <div class="border-b border-border pb-8">
-      <h2 id="units-title" class="m-0 max-w-lg font-display text-4xl font-black leading-none tracking-[-.02em] sm:text-5xl">Tu mapa para avanzar</h2>
-      <p class="mt-5 max-w-prose text-base leading-7 text-muted">Cada unidad reúne aprendizajes y pantallas. Entra a cualquier pantalla disponible para comenzar.</p>
-    </div>
+    <h2 id="units-title" class="m-0 border-b border-border pb-6 font-display text-4xl font-black leading-none tracking-[-.02em] sm:text-5xl">Unidades</h2>
 
     <ol class="mt-8 grid list-none gap-5 p-0">
       {units.map((unit, index) => {
@@ -39,7 +39,7 @@ const {
         const firstScreenHref = unitLearnings[0]?.screens[0]?.href ?? unitLessons[0]?.href;
         const unitHref = unit.id === featuredUnitId && featuredHref ? featuredHref : (firstScreenHref ?? sitePath(`${coursePath}/`));
 
-        return <li class:list={[
+        return <li data-unit class:list={[
           'rounded-panel border border-border bg-surface p-6 sm:p-8',
           unit.id === featuredUnitId && 'border-primary/40 shadow-soft'
         ]}>
@@ -60,9 +60,9 @@ const {
           {unitLearnings.length > 0 ? <ol class="mt-5 grid list-none gap-3 p-0 sm:grid-cols-2">
             {unitLearnings.map((learning, learningIndex) => <li class="rounded-xl bg-secondary-soft/45 p-4">
               <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Aprendizaje {learningIndex + 1}</p>
-              <p class="mt-2 font-semibold leading-6">{learning.title}</p>
+              <p class="mt-2 font-semibold leading-6" title={learning.title}>{shortTitle(learning.title, 'learning', bilingual)}</p>
               <ol class="mt-2 list-none border-t border-border/70 p-0">
-                {learning.screens.map((screen, screenIndex) => <li><a class="flex items-start gap-2 pt-3 text-sm font-bold text-primary no-underline hover:text-primary-hover" href={screen.href ?? '#proximamente'}><span class="text-muted">{String(screenIndex + 1).padStart(2, '0')}</span><span>{screen.title}</span></a></li>)}
+                {learning.screens.map((screen, screenIndex) => <li><a class="flex items-start gap-2 pt-3 text-sm font-bold text-primary no-underline hover:text-primary-hover" href={screen.href ?? '#proximamente'}><span class="text-muted">{String(screenIndex + 1).padStart(2, '0')}</span><span>{shortTitle(screen.title, 'screen', bilingual)}</span></a></li>)}
               </ol>
             </li>)}
           </ol> : unitLessons.length > 0 ? <ol class="mt-5 list-none border-t border-border p-0">
@@ -80,3 +80,19 @@ const {
     </div>
   </Container>
 </section>
+
+<script>
+  // Resalta la unidad de la última pantalla visitada (el mismo dato que usa el botón "Continuar").
+  const path = (href: string) => new URL(href, location.href).pathname.replace(/\/+$/, '');
+  try {
+    const last = JSON.parse(localStorage.getItem(`pel:last:${document.querySelector<HTMLElement>('[data-resume-cta]')?.dataset.resumeCta}`) ?? 'null');
+    const unit = last?.href && [...document.querySelectorAll<HTMLAnchorElement>('[data-unit] a')]
+      .find((link) => path(link.href) === path(last.href))?.closest('[data-unit]');
+    if (unit) {
+      document.querySelectorAll('[data-unit]').forEach((item) => {
+        item.classList.toggle('border-primary/40', item === unit);
+        item.classList.toggle('shadow-soft', item === unit);
+      });
+    }
+  } catch {}
+</script>

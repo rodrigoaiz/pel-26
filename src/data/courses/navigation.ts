@@ -97,18 +97,22 @@ export function getCourseNavigation(entries: LessonEntry[], course: Pick<Course,
 
 export function getLessonNavigation(entries: LessonEntry[], entry: LessonEntry, course: Pick<Course, 'slug'>) {
   const courseNavigation = getCourseNavigation(entries, course);
-  const currentIndex = courseNavigation.screens.findIndex((screen) => screen.entry.id === entry.id);
-  const unitScreens = courseNavigation.lessonsByUnit[entry.data.unit.id] ?? [];
-  const currentLearningIndex = getLearningGroups(unitScreens).findIndex((group) => group.id === entry.data.learning.id);
+  const { screens } = courseNavigation;
+  const currentIndex = screens.findIndex((screen) => screen.entry.id === entry.id);
+  const learningGroups = courseNavigation.learningGroupsByUnit[entry.data.unit.id] ?? [];
+  const learningScreens = learningGroups.find((group) => group.id === entry.data.learning.id)?.screens ?? [];
 
   return {
-    lessons: courseNavigation.screens,
-    nextLesson: courseNavigation.screens[currentIndex + 1],
+    lessons: screens,
+    prevLesson: screens[currentIndex - 1],
+    nextLesson: screens[currentIndex + 1],
     currentSlug: entry.id,
-    progressLabel: `Aprendizaje ${currentLearningIndex + 1} de ${getLearningGroups(unitScreens).length}`,
-    learningGroups: courseNavigation.learningGroupsByUnit[entry.data.unit.id] ?? [],
+    learningGroups,
+    learningScreens,
+    screenPosition: learningScreens.findIndex((screen) => screen.id === entry.id) + 1,
     unitLinks: courseNavigation.units.map((unit, index) => ({
       label: String(index + 1),
+      title: unit.theme,
       href: courseNavigation.lessonsByUnit[unit.id][0].href,
       current: unit.id === entry.data.unit.id
     }))

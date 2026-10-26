@@ -7,12 +7,14 @@ import { imagePath } from '@/utils/resource-path';
 interface Props {
   title?: string;
   description?: string;
+  courseSlug?: string;
   ctaLabel?: string;
   ctaHref?: string;
   progressLabel?: string;
 }
 
 const {
+  courseSlug = 'frances-1',
   title = 'El francés empieza cuando te atreves a conversar.',
   description = 'Recorre situaciones cotidianas, practica a tu ritmo y usa Moodle justo cuando toca participar, entregar o evaluar.',
   ctaLabel = 'Continuar mi recorrido',
@@ -33,19 +35,19 @@ const {
 
   <Container class="flex min-h-course-hero items-end pb-10 pt-20 sm:min-h-course-hero-lg sm:pb-16 lg:items-center lg:py-24">
     <div class="max-w-3xl text-foreground dark:text-on-navy" data-hero-copy>
-      <h1 id="course-title" class="max-w-headline text-balance font-display text-5xl font-black leading-display tracking-display sm:text-6xl lg:text-8xl">
+      <h1 id="course-title" class="max-w-headline text-balance font-display text-5xl font-black leading-display tracking-display sm:text-6xl">
         {title}
       </h1>
       <p class="mt-6 max-w-prose text-base leading-7 text-muted sm:text-lg dark:text-on-navy/80">
         {description}
       </p>
       <div class="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-        <Button href={ctaHref} class="w-full sm:w-auto">
-          {ctaLabel} <ArrowIcon />
+        <Button href={ctaHref} class="w-full sm:w-auto" data-resume-cta={courseSlug}>
+          <span data-resume-label>{ctaLabel}</span> <ArrowIcon />
         </Button>
         <p class="m-0 flex items-center gap-3 text-sm font-semibold text-muted dark:text-on-navy/75">
-          <span class="h-px w-8 bg-highlight" aria-hidden="true"></span>
-          {progressLabel}
+          <span class="h-px w-8 shrink-0 bg-highlight" aria-hidden="true"></span>
+          <span data-resume-detail>{progressLabel}</span>
         </p>
       </div>
     </div>
@@ -54,6 +56,17 @@ const {
 
 <script>
   import { gsap } from 'gsap';
+
+  // Si el alumno ya visitó una pantalla, el botón lo regresa ahí (lo guarda LessonPage).
+  const resume = document.querySelector<HTMLAnchorElement>('[data-resume-cta]');
+  try {
+    const last = resume && JSON.parse(localStorage.getItem(`pel:last:${resume.dataset.resumeCta}`) ?? 'null');
+    if (resume && last?.href) {
+      resume.href = last.href;
+      resume.querySelector('[data-resume-label]')!.textContent = 'Continuar donde te quedaste';
+      document.querySelector('[data-resume-detail]')!.textContent = last.label;
+    }
+  } catch {}
 
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });

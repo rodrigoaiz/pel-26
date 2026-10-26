@@ -6,6 +6,5 @@ export const course = {
   plan: 'Plan nuevo',
   description: 'Recorre situaciones cotidianas, practica a tu ritmo y conversa con más seguridad.',
   status: 'Piloto disponible',
-  heroTitle: 'El francés empieza cuando te atreves a conversar.',
-  ctaLabel: 'Continuar mi recorrido'
+  heroTitle: 'El francés empieza cuando te atreves a conversar.'
 } satisfies Course;

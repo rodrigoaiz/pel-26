@@ -26,9 +26,9 @@ const src = moodleActivityUrl(activityKey);
         <h2 class="mt-4 font-display text-3xl font-black leading-none sm:text-4xl">{title}</h2>
         <p class="mb-0 mt-3 max-w-prose text-sm leading-6 text-muted sm:text-base">{description}</p>
       </div>
-      <Button class="mt-6 w-full lg:mt-0 lg:w-auto" type="button" data-activity-launch data-activity-title={`Foro: ${title}`} data-activity-src={src}>
+      {src ? <Button class="mt-6 w-full lg:mt-0 lg:w-auto" type="button" data-activity-launch data-activity-title={`Foro: ${title}`} data-activity-src={src}>
         {buttonLabel}<ArrowIcon />
-      </Button>
+      </Button> : <p class="mb-0 mt-6 rounded-xl border border-dashed border-border px-4 py-3 text-sm font-bold text-muted lg:mt-0">Actividad disponible próximamente</p>}
     </div>
   </Container>
 </section>

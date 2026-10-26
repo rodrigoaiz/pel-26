@@ -1,70 +1,63 @@
 ---
-import type { LearningGroup, Lesson } from '@/data/courses/types';
+import type { LearningGroup } from '@/data/courses/types';
+import ArrowIcon from '@/components/ui/ArrowIcon.astro';
+import { shortTitle } from '@/utils/bilingual-title';
 
 interface Props {
-  lessons: Lesson[];
   currentSlug: string;
+  currentLearningId?: string;
   unitLabel?: string;
   unitTitle?: string;
   learningGroups?: LearningGroup[];
-  unitLinks?: { label: string; href: string; current?: boolean }[];
+  unitLinks?: { label: string; title: string; href: string; current?: boolean }[];
+  bilingual?: boolean;
 }
 
-const { lessons, currentSlug, unitLabel = 'Unidad 2', unitTitle = 'Hablar de mí', learningGroups = [], unitLinks = [] } = Astro.props;
+const { currentSlug, currentLearningId, unitLabel = 'Unidad 2', unitTitle = 'Hablar de mí', learningGroups = [], unitLinks = [], bilingual } = Astro.props;
+const otherUnits = unitLinks.filter((unit) => !unit.current);
 ---
 
 <div class="fixed inset-0 z-40 bg-navy/55" data-index-backdrop hidden></div>
-<aside class="fixed inset-x-3 bottom-3 top-20 z-50 overflow-auto rounded-panel bg-surface-raised p-5 shadow-raised sm:left-auto sm:right-6 sm:w-96" id="lesson-index" data-index-panel aria-label={`Lecciones de ${unitLabel}`} hidden>
-  {unitLinks.length > 1 && <div class="relative mb-5 pt-2">
-    <span class="absolute left-3 top-0 z-10 -translate-y-1/2 rounded-full bg-primary px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-on-primary">Unidades</span>
-    <nav class="flex items-center justify-between rounded-xl border border-border bg-surface p-1" aria-label="Cambiar de unidad">
-      {unitLinks.map((unit) => <a class:list={[
-        'grid min-h-10 min-w-10 place-items-center rounded-lg px-3 text-xs font-bold no-underline transition',
-        unit.current ? 'bg-secondary-soft text-secondary' : 'text-muted hover:bg-secondary-soft hover:text-secondary'
-      ]} href={unit.href} aria-label={`Ir a Unidad ${unit.label}`} aria-current={unit.current ? 'page' : undefined}>{unit.label}</a>)}
-    </nav>
-  </div>}
-  <div class="flex items-center justify-between gap-4">
-    <div>
-        <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">{unitLabel}</p>
-        <h2 class="mt-1 font-display text-3xl font-black leading-none">{unitTitle}</h2>
-    </div>
-    <button class="grid size-10 place-items-center rounded-xl border border-border bg-surface transition hover:border-secondary hover:bg-secondary-soft" type="button" data-index-close aria-label="Cerrar índice">
+<aside class="fixed inset-x-3 bottom-3 top-20 z-50 overflow-auto rounded-panel bg-surface-raised p-5 shadow-raised sm:left-auto sm:right-6 sm:w-96" id="lesson-index" data-index-panel aria-label={`Índice de ${unitLabel}`} hidden>
+  <div class="flex items-start justify-between gap-4 border-b border-border pb-4">
+    <p class="m-0 font-display text-xl font-black leading-tight"><span class="text-secondary">{unitLabel}</span> · {shortTitle(unitTitle, 'unit', bilingual)}</p>
+    <button class="grid size-10 shrink-0 place-items-center rounded-xl border border-border bg-surface transition hover:border-secondary hover:bg-secondary-soft" type="button" data-index-close aria-label="Cerrar índice">
       <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
     </button>
   </div>
-  <ol class="mt-6 list-none p-0">
-    {learningGroups.length > 0 && <li class="border-t border-border py-3">
-      <p class="m-0 text-xs font-bold uppercase tracking-widest text-secondary">Aprendizajes y pantallas</p>
-      <ol class="mt-2 list-none p-0">
-        {learningGroups.map((learning, index) => <li class="border-t border-border/70 first:border-t-0">
-          <p class="m-0 pt-3 text-xs font-bold text-secondary">Aprendizaje {index + 1}: {learning.title}</p>
-          <ol class="list-none p-0">
-            {learning.screens.map((screen, screenIndex) => <li><a class="flex items-center gap-3 py-3 pl-3 text-sm text-foreground no-underline hover:text-secondary" href={screen.href ?? `#${screen.id}`}><span class="text-muted">{String(screenIndex + 1).padStart(2, '0')}</span><span>{screen.title}</span></a></li>)}
+
+  <ol class="m-0 mt-2 list-none p-0">
+    {learningGroups.map((learning, index) => {
+      const isCurrentLearning = learning.id === currentLearningId;
+      const position = learning.screens.findIndex((screen) => screen.id === currentSlug) + 1;
+      return <li class="border-b border-border/70">
+        <details class="group" open={isCurrentLearning}>
+          <summary class="flex cursor-pointer list-none items-center gap-3 py-3 text-sm [&::-webkit-details-marker]:hidden">
+            <svg class="size-4 shrink-0 text-muted transition group-open:rotate-90" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <span class="min-w-0 flex-1 truncate" title={learning.title}><strong class:list={[isCurrentLearning ? 'text-primary' : 'text-foreground']}>Aprendizaje {index + 1}</strong> <span class="text-muted">· {shortTitle(learning.title, 'learning', bilingual)}</span></span>
+            <span class="shrink-0 text-xs font-bold text-muted">{isCurrentLearning ? `${position}/${learning.screens.length}` : learning.screens.length}</span>
+          </summary>
+          <ol class="m-0 mb-3 list-none p-0">
+            {learning.screens.map((screen, screenIndex) => {
+              const isCurrent = screen.id === currentSlug;
+              return <li><a class:list={[
+                'flex items-center gap-3 rounded-lg py-2.5 pl-7 pr-3 text-sm no-underline hover:text-secondary',
+                isCurrent ? 'bg-secondary-soft font-bold text-secondary' : 'text-foreground'
+              ]} href={screen.href} aria-current={isCurrent ? 'page' : undefined}><span class="text-muted">{String(screenIndex + 1).padStart(2, '0')}</span><span class="min-w-0 flex-1">{shortTitle(screen.title, 'screen', bilingual)}</span>{isCurrent && <span class="text-xs">Estás aquí</span>}</a></li>;
+            })}
           </ol>
-        </li>)}
-      </ol>
-    </li>}
-    {learningGroups.length === 0 && lessons.map((item, index) => {
-      const isCurrent = item.slug === currentSlug;
-      const isLocked = item.status === 'locked';
-      return (
-        <li class="border-t border-border first:border-t-0">
-          <a
-            class:list={[
-              'grid grid-cols-[2rem_1fr_auto] items-center gap-3 py-4 text-sm no-underline transition hover:text-secondary',
-              isCurrent ? 'font-bold text-secondary' : 'text-foreground',
-              isLocked && 'opacity-50'
-            ]}
-             href={isCurrent ? '#inicio' : (item.href ?? '#proximamente')}
-            aria-current={isCurrent ? 'page' : undefined}
-          >
-            <span class="text-muted">{String(index + 1).padStart(2, '0')}</span>
-            <span>{item.title}</span>
-            {isCurrent && <span class="size-2 rounded-full bg-primary" aria-label="Lección actual"></span>}
-          </a>
-        </li>
-      );
+        </details>
+      </li>;
     })}
   </ol>
+
+  {otherUnits.length > 0 && <nav class="mt-6" aria-label="Otras unidades">
+    <p class="m-0 text-xs font-bold uppercase tracking-widest text-muted">Otras unidades</p>
+    <ul class="m-0 mt-2 list-none p-0">
+      {otherUnits.map((unit) => <li><a class="flex items-center gap-3 rounded-lg py-2.5 text-sm no-underline hover:text-secondary" href={unit.href}>
+        <span class="min-w-0 flex-1 truncate"><strong>Unidad {unit.label}</strong> <span class="text-muted">· {shortTitle(unit.title, 'unit', bilingual)}</span></span>
+        <ArrowIcon class="size-4 shrink-0" />
+      </a></li>)}
+    </ul>
+  </nav>}
 </aside>
